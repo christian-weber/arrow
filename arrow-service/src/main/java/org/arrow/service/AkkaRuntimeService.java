@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.arrow.service.impl;
+package org.arrow.service;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -72,9 +72,6 @@ import java.util.*;
 public class AkkaRuntimeService implements RuntimeService {
 
     @Autowired
-    private ActorSystem system;
-
-    @Autowired
     private ApplicationContext context;
     @Autowired
     private Neo4jTemplate template;
@@ -84,14 +81,6 @@ public class AkkaRuntimeService implements RuntimeService {
     private StartEventRepository startEventRepository;
     @Autowired
     private TaskScheduler scheduler;
-    @Autowired
-    private ProcessInstanceStore piStore;
-    @Autowired
-    private SignalEventCompoundService signalEventCompoundService;
-    @Autowired
-    private MessageEventCompoundService messageEventCompoundService;
-    @Autowired
-    private NoneEventCompoundService noneEventCompoundService;
 
     @Autowired
     private EventMessageEventBus eventMessageEventBus;
@@ -115,6 +104,8 @@ public class AkkaRuntimeService implements RuntimeService {
      */
     @Override
     public Future<ProcessInstance> startProcessById(String id, Map<String, Object> variables) {
+
+        NoneEventCompoundService noneEventCompoundService = context.getBean(NoneEventCompoundService.class);
 
         NoneEventRequest request = new NoneEventRequest(id, variables);
 
@@ -187,6 +178,8 @@ public class AkkaRuntimeService implements RuntimeService {
     @Override
     public Future<Iterable<EventMessage>> signal(String signalRef, Execution exec, Map<String, Object> vars) {
 
+        SignalEventCompoundService signalEventCompoundService = context.getBean(SignalEventCompoundService.class);
+
         // prepare the request
         SignalEventRequest req = new SignalEventRequest(signalRef, exec, vars);
 
@@ -225,6 +218,8 @@ public class AkkaRuntimeService implements RuntimeService {
     @Override
     public Future<Iterable<ProcessInstance>> startProcessBySignal(String signalRef, Map<String, Object> variables) {
 
+        SignalEventCompoundService signalEventCompoundService = context.getBean(SignalEventCompoundService.class);
+
         SignalEventRequest request = new SignalEventRequest(signalRef, null, variables);
         Future<Iterable<EventMessage>> messages = signalEventCompoundService.getEventMessages(request);
 
@@ -259,6 +254,9 @@ public class AkkaRuntimeService implements RuntimeService {
      */
     @Override
     public Future<Iterable<EventMessage>> message(String message) {
+        ActorSystem system = context.getBean(ActorSystem.class);
+        MessageEventCompoundService messageEventCompoundService = context.getBean(MessageEventCompoundService.class);
+
         Future<Iterable<EventMessage>> future = messageEventCompoundService.getEventMessages(new MessageEventRequest(message, new HashMap<>()));
         future.onSuccess(getEventPublisher(), system.dispatcher());
 
@@ -278,6 +276,8 @@ public class AkkaRuntimeService implements RuntimeService {
      */
     @Override
     public Future<ProcessInstance> startProcessByMessage(String messageRef, Map<String, Object> variables) {
+
+        MessageEventCompoundService messageEventCompoundService = context.getBean(MessageEventCompoundService.class);
 
         // prepare the request
         MessageEventRequest request = new MessageEventRequest(messageRef, variables, true);
@@ -336,6 +336,8 @@ public class AkkaRuntimeService implements RuntimeService {
      */
     @Override
     public Future<EventMessage> startProcessByStartEvent(StartEventSpecification event, Map<String, Object> variables) {
+
+        ProcessInstanceStore piStore = context.getBean(ProcessInstanceStore.class);
 
         // store the process instance
         ProcessInstance pi = piStore.store(event, variables);

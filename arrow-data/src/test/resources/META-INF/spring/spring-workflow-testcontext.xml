@@ -27,9 +27,9 @@ http://www.springframework.org/schema/tx
 
 	<neo4j:config storeDirectory="build/neo4jdb" />
 
-	<bean class="org.arrow.service.impl.RepositoryServiceImpl"></bean>
+	<bean class="org.arrow.service.RepositoryServiceImpl"></bean>
 	<bean id="akkaRuntimeService"
-		class="org.arrow.service.impl.AkkaRuntimeService"></bean>
+		class="org.arrow.service.AkkaRuntimeService"></bean>
 
 	<!-- <task:executor id="executor" pool-size="10" rejection-policy="ABORT"/> -->
 	<bean class="org.springframework.core.task.SimpleAsyncTaskExecutor">

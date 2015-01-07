@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.arrow.service.impl;
+package org.arrow.service;
 
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -56,9 +56,9 @@ import static org.arrow.util.StreamUtils.containsInstanceOf;
  * @since 1.0.0
  */
 @Service
-public class RepositoryServiceImpl implements RepositoryService {
+public class DefaultRepositoryService implements RepositoryService {
 
-    private Logger logger = Logger.getLogger(RepositoryServiceImpl.class);
+    private Logger logger = Logger.getLogger(DefaultRepositoryService.class);
 
     @Autowired
     private GraphDatabaseService graphService;
