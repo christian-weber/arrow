@@ -14,10 +14,30 @@
  * limitations under the License.
  */
 
-package org.arrow.service.execution;
+package org.arrow.service;
 
 import akka.actor.Cancellable;
 import akka.dispatch.Futures;
+import org.arrow.runtime.RuntimeService;
+import org.arrow.runtime.api.gateway.TransitionEvaluation;
+import org.arrow.runtime.api.query.ExecutionQuery;
+import org.arrow.runtime.api.task.JavaDelegate;
+import org.arrow.runtime.definition.RelationDef;
+import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.execution.ProcessInstance;
+import org.arrow.runtime.execution.State;
+import org.arrow.runtime.execution.service.*;
+import org.arrow.runtime.message.EventMessage;
+import org.arrow.runtime.message.impl.EscalationEventMessage;
+import org.arrow.runtime.message.impl.TimerEventMessage;
+import org.arrow.service.engine.concurrent.ScheduledFutureCancellableAdapter;
+import org.arrow.service.engine.concurrent.dispatch.onsuccess.PublishEventMessagesOnSuccess;
+import org.arrow.service.engine.service.ProcessEngine;
+import org.arrow.service.microservice.impl.message.MessageEventCompoundService;
+import org.arrow.service.microservice.impl.message.MessageEventRequest;
+import org.arrow.service.microservice.impl.signal.SignalEventCompoundService;
+import org.arrow.service.microservice.impl.signal.SignalEventRequest;
+import org.arrow.util.DelegateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
@@ -34,26 +54,6 @@ import org.springframework.scheduling.Trigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.arrow.runtime.RuntimeService;
-import org.arrow.runtime.api.gateway.TransitionEvaluation;
-import org.arrow.runtime.definition.RelationDef;
-import org.arrow.runtime.message.EventMessage;
-import org.arrow.runtime.api.query.ExecutionQuery;
-import org.arrow.runtime.api.task.JavaDelegate;
-import org.arrow.runtime.execution.Execution;
-import org.arrow.runtime.execution.ProcessInstance;
-import org.arrow.runtime.execution.State;
-import org.arrow.runtime.message.impl.EscalationEventMessage;
-import org.arrow.runtime.message.impl.TimerEventMessage;
-import org.arrow.runtime.execution.service.*;
-import org.arrow.service.engine.concurrent.ScheduledFutureCancellableAdapter;
-import org.arrow.service.engine.concurrent.dispatch.onsuccess.PublishEventMessagesOnSuccess;
-import org.arrow.service.engine.service.ProcessEngine;
-import org.arrow.service.microservice.impl.message.MessageEventCompoundService;
-import org.arrow.service.microservice.impl.message.MessageEventRequest;
-import org.arrow.service.microservice.impl.signal.SignalEventCompoundService;
-import org.arrow.service.microservice.impl.signal.SignalEventRequest;
-import org.arrow.util.DelegateUtil;
 import scala.concurrent.Future;
 
 import java.util.*;
@@ -66,10 +66,10 @@ import java.util.concurrent.ScheduledFuture;
  * @since 1.0.0
  */
 @Service
-public class ExecutionServiceImpl implements ExecutionService {
+public class DefaultExecutionService implements ExecutionService {
 
-    @Autowired
-    private RuntimeService runtimeService;
+//    @Autowired
+//    private RuntimeService runtimeService;
     @Autowired
     private ApplicationContext context;
     @Autowired
@@ -78,10 +78,10 @@ public class ExecutionServiceImpl implements ExecutionService {
     private Neo4jTemplate neo4jTemplate;
     @Autowired
     private TaskScheduler scheduler;
-    @Autowired
-    private SignalEventCompoundService signalEventCompoundService;
-    @Autowired
-    private MessageEventCompoundService messageEventCompoundService;
+//    @Autowired
+//    private SignalEventCompoundService signalEventCompoundService;
+//    @Autowired
+//    private MessageEventCompoundService messageEventCompoundService;
     @Autowired
     private ExecutionDataService executionDataService;
     @Autowired
@@ -102,6 +102,8 @@ public class ExecutionServiceImpl implements ExecutionService {
      */
     @Override
     public Future<Iterable<EventMessage>> signal(String signalRef, Map<String, Object> variables) {
+        SignalEventCompoundService signalEventCompoundService = context.getBean(SignalEventCompoundService.class);
+
         SignalEventRequest req = new SignalEventRequest(signalRef, null, variables);
         return signalEventCompoundService.getEventMessages(req);
     }
@@ -134,6 +136,7 @@ public class ExecutionServiceImpl implements ExecutionService {
      */
     @Override
     public Future<EventMessage> publishMessageEvent(String message, Execution execution) {
+        RuntimeService runtimeService = context.getBean(RuntimeService.class);
         return runtimeService.message(message, execution);
     }
 
@@ -142,6 +145,7 @@ public class ExecutionServiceImpl implements ExecutionService {
      */
     @Override
     public Future<EventMessage> publishMessageEvent(String message, Execution execution, Map<String, Object> variables) {
+        RuntimeService runtimeService = context.getBean(RuntimeService.class);
         return runtimeService.message(message, execution, variables);
     }
 
@@ -190,6 +194,7 @@ public class ExecutionServiceImpl implements ExecutionService {
      */
     @Override
     public Future<EventMessage> publishErrorEvent(Execution execution, Exception ex) {
+        RuntimeService runtimeService = context.getBean(RuntimeService.class);
         return runtimeService.publishErrorEvent(execution, ex);
     }
 
@@ -198,6 +203,8 @@ public class ExecutionServiceImpl implements ExecutionService {
      */
     @Override
     public Future<Iterable<EventMessage>> publishMessageEvent(String message) {
+        MessageEventCompoundService messageEventCompoundService = context.getBean(MessageEventCompoundService.class);
+
         MessageEventRequest request = new MessageEventRequest(message, new HashMap<>());
         return messageEventCompoundService.getEventMessages(request);
     }

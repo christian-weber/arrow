@@ -16,7 +16,10 @@
 
 package org.arrow.service;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.arrow.runtime.RuntimeService;
@@ -24,6 +27,8 @@ import org.arrow.runtime.execution.Execution;
 import org.arrow.runtime.execution.service.ExecutionUserService;
 import org.arrow.runtime.message.EventMessage;
 import org.arrow.runtime.message.impl.DefaultFinishEventMessage;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Default {@link ExecutionUserService} implementation.
@@ -36,14 +41,17 @@ import org.arrow.runtime.message.impl.DefaultFinishEventMessage;
 public class DefaultExecutionUserService implements ExecutionUserService {
 
     @Autowired
-    private RuntimeService runtimeService;
+    private ApplicationContext applicationContext;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void finish(Execution execution) {
+        RuntimeService runtimeService = applicationContext.getBean(RuntimeService.class);
+
         EventMessage eventMessage = new DefaultFinishEventMessage(execution);
         runtimeService.publishEventMessage(eventMessage);
     }
+
 }

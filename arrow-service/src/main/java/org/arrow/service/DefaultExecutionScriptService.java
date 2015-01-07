@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.arrow.service.execution;
+package org.arrow.service;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;

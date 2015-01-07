@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package org.arrow.service.execution;
+package org.arrow.service;
 
 import akka.actor.ActorSystem;
-import org.spockframework.util.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 import org.arrow.model.task.Task;
 import org.arrow.runtime.execution.Execution;
 import org.arrow.runtime.execution.ProcessInstance;
@@ -35,6 +31,10 @@ import org.arrow.runtime.message.impl.DefaultExecuteEventMessage;
 import org.arrow.runtime.message.impl.DefaultFinishEventMessage;
 import org.arrow.service.engine.concurrent.dispatch.onsuccess.PublishEventMessagesOnSuccess;
 import org.arrow.util.FutureUtil;
+import org.spockframework.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import scala.concurrent.Future;
 
 import java.util.Arrays;
@@ -46,7 +46,7 @@ import java.util.Arrays;
  * @author christian.weber
  */
 @Service
-public class AdHocExecutionServiceImpl implements ExecutionAdHocService {
+public class DefaultAdHocExecutionService implements ExecutionAdHocService {
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -58,9 +58,6 @@ public class AdHocExecutionServiceImpl implements ExecutionAdHocService {
     private ExecutionRepository executionRepository;
 
     @Autowired
-    private ActorSystem actorSystem;
-
-    @Autowired
     private ProcessInstanceRepository processInstanceRepository;
 
     /**
@@ -68,6 +65,8 @@ public class AdHocExecutionServiceImpl implements ExecutionAdHocService {
      */
     @Override
     public void execute(ProcessInstance pi, String adHocId, String taskId) {
+
+        ActorSystem actorSystem = applicationContext.getBean(ActorSystem.class);
 
         ProcessInstance adHocPi = processInstanceRepository.findAdHocSubProcess(pi.getNodeId(), adHocId);
 
