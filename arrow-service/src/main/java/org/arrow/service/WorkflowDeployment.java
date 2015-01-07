@@ -26,7 +26,10 @@ import org.arrow.runtime.service.RepositoryService;
 import java.io.InputStream;
 
 /**
- * Created by christian.weber on 27.11.2014.
+ * This class can be used to deploy a bpmn business process.
+ *
+ * @since 1.0.0
+ * @author christian.weber
  */
 @Component
 public class WorkflowDeployment {
