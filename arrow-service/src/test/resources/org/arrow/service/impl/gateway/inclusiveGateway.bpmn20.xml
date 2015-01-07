@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test">
+
+    <process id="inclusiveGatewayTest" isExecutable="true">
+        <startEvent id="startevent1"/>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="inclusivegateway1"/>
+        <inclusiveGateway id="inclusivegateway1"/>
+        <sequenceFlow id="flow2" sourceRef="inclusivegateway1" targetRef="servicetask1">
+            <conditionExpression>#var1 == 1</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="inclusivegateway1" targetRef="servicetask2">
+            <conditionExpression>#var2 == 2</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="inclusivegateway1" targetRef="servicetask3">
+            <conditionExpression>#var3 == 3</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="inclusivegateway1" targetRef="servicetask4">
+            <conditionExpression>#var4 == 4</conditionExpression>
+        </sequenceFlow>
+        <scriptTask id="servicetask1" scriptFormat="groovy">
+            <script>sleep 1000</script>
+        </scriptTask>
+        <scriptTask id="servicetask2" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <scriptTask id="servicetask3" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <scriptTask id="servicetask4" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="inclusivegateway2"/>
+        <sequenceFlow id="flow7" sourceRef="servicetask2" targetRef="inclusivegateway2"/>
+        <sequenceFlow id="flow8" sourceRef="servicetask3" targetRef="inclusivegateway2"/>
+        <sequenceFlow id="flow9" sourceRef="servicetask4" targetRef="inclusivegateway2"/>
+        <sequenceFlow id="flow10" sourceRef="inclusivegateway2" targetRef="endevent1"/>
+        <inclusiveGateway id="inclusivegateway2"/>
+        <endEvent id="endevent1" name="End"/>
+    </process>
+
+    <process id="B_inclusiveGatewayTest" isExecutable="true">
+        <startEvent id="B_startevent1"/>
+        <sequenceFlow id="B_flow1" sourceRef="B_startevent1" targetRef="B_inclusivegateway1"/>
+        <inclusiveGateway id="B_inclusivegateway1"/>
+        <sequenceFlow id="B_flow2" sourceRef="B_inclusivegateway1" targetRef="B_servicetask2">
+            <conditionExpression>#var1 == 1</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="B_flow3" sourceRef="B_inclusivegateway1" targetRef="B_servicetask1">
+            <conditionExpression>#var2 == 2</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="B_flow4" sourceRef="B_inclusivegateway1" targetRef="B_servicetask3">
+            <conditionExpression>#var3 == 3</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="B_flow5" sourceRef="B_inclusivegateway1" targetRef="B_servicetask4">
+            <conditionExpression>#var4 == 4</conditionExpression>
+        </sequenceFlow>
+        <scriptTask id="B_servicetask2" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <scriptTask id="B_servicetask1" scriptFormat="groovy">
+            <script>sleep 1000</script>
+        </scriptTask>
+        <scriptTask id="B_servicetask3" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <scriptTask id="B_servicetask4" scriptFormat="groovy">
+            <script>println "Task"</script>
+        </scriptTask>
+        <sequenceFlow sourceRef="B_servicetask1" targetRef="exclusivegateway1"/>
+        <sequenceFlow sourceRef="exclusivegateway1" targetRef="B_endevent2">
+            <conditionExpression>true</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="exclusivegateway1" targetRef="B_inclusivegateway2">
+            <conditionExpression>false</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="B_servicetask2" targetRef="B_inclusivegateway2"/>
+        <sequenceFlow sourceRef="B_servicetask3" targetRef="B_inclusivegateway2"/>
+        <sequenceFlow sourceRef="B_servicetask4" targetRef="B_inclusivegateway2"/>
+        <sequenceFlow sourceRef="B_inclusivegateway2" targetRef="B_endevent1"/>
+        <inclusiveGateway id="B_inclusivegateway2"/>
+        <exclusiveGateway id="exclusivegateway1"/>
+        <endEvent id="B_endevent1" name="End"/>
+        <endEvent id="B_endevent2" name="End"/>
+    </process>
+
+</definitions>

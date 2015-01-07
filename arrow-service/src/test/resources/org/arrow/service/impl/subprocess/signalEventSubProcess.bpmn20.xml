@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions id="Definition"
+             targetNamespace="http://www.arrow.org/test"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+
+    <signal id="signalEventSubProcess" name="signalEventSubProcess"/>
+
+    <process id="signalEventSubProcessTest" isExecutable="true">
+        <startEvent id="startevent1" name="Start"/>
+        <sequenceFlow id="flow1" targetRef="throw1" sourceRef="startevent1"/>
+        <intermediateThrowEvent id="throw1">
+            <signalEventDefinition id="signal1" signalRef="signalEventSubProcess"/>
+        </intermediateThrowEvent>
+        <subProcess id="eventsubprocess" triggeredByEvent="true">
+            <startEvent id="startevent2" isInterrupting="false">
+                <signalEventDefinition id="signal2" signalRef="signalEventSubProcess"/>
+            </startEvent>
+            <sequenceFlow id="flow2" targetRef="endevent2" sourceRef="startevent2"/>
+            <endEvent id="endevent2"/>
+        </subProcess>
+        <sequenceFlow id="flow3" targetRef="endevent1" sourceRef="throw1"/>
+        <endEvent id="endevent1"/>
+    </process>
+
+
+    <signal id="signalEventSubProcess_interrupting" name="signalEventSubProcess_interrupting"/>
+
+    <process id="signalEventSubProcessTest_interrupting" isExecutable="true">
+        <startEvent id="startevent3" />
+        <sequenceFlow id="flow4" targetRef="throw2" sourceRef="startevent3"/>
+        <intermediateThrowEvent id="throw2">
+            <signalEventDefinition id="signal3" signalRef="signalEventSubProcess_interrupting"/>
+        </intermediateThrowEvent>
+        <subProcess id="eventsubprocess2" triggeredByEvent="true">
+            <startEvent id="startevent4" isInterrupting="true">
+                <signalEventDefinition id="signal4" signalRef="signalEventSubProcess_interrupting"/>
+            </startEvent>
+            <sequenceFlow id="flow5" targetRef="endevent3" sourceRef="startevent4"/>
+            <endEvent id="endevent3"/>
+        </subProcess>
+        <sequenceFlow id="flow6" targetRef="endevent4" sourceRef="throw2"/>
+        <endEvent id="endevent4"/>
+    </process>
+
+</definitions>

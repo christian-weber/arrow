@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test">
+    <process id="complexGatewayTest" isExecutable="true">
+        <startEvent id="startevent1"/>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="complexgateway1"/>
+        <complexGateway id="complexgateway1" name="complex Gateway">
+            <extensionElements>
+                <class>org.arrow.service.impl.WorkflowGatewayTest$CustomTransitionEvaluation1</class>
+            </extensionElements>
+        </complexGateway>
+        <sequenceFlow id="flow2" sourceRef="complexgateway1" targetRef="servicetask1"/>
+        <sequenceFlow id="flow3" sourceRef="complexgateway1" targetRef="servicetask2"/>
+        <sequenceFlow id="flow4" sourceRef="complexgateway1" targetRef="servicetask3"/>
+        <sequenceFlow id="flow5" sourceRef="complexgateway1" targetRef="servicetask4"/>
+        <manualTask id="servicetask1" />
+        <manualTask id="servicetask2" />
+        <manualTask id="servicetask3" />
+        <manualTask id="servicetask4" />
+        <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="complexgateway2"/>
+        <sequenceFlow id="flow7" sourceRef="servicetask2" targetRef="complexgateway2"/>
+        <sequenceFlow id="flow8" sourceRef="servicetask3" targetRef="complexgateway2"/>
+        <sequenceFlow id="flow9" sourceRef="servicetask4" targetRef="complexgateway2"/>
+        <complexGateway id="complexgateway2">
+            <extensionElements>
+                <class>org.arrow.service.impl.WorkflowGatewayTest$CustomTransitionEvaluation2</class>
+            </extensionElements>
+        </complexGateway>
+        <sequenceFlow id="flow10" sourceRef="complexgateway2" targetRef="endevent1"/>
+        <endEvent id="endevent1" name="End"/>
+    </process>
+
+</definitions>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.arrows.org/test" id="scenario01">
+
+    <process id="scenario01-transaction-with-manual-tasks" name="Main Process" >
+
+        <!-- Start Event -->
+        <!-- *********** -->
+        <startEvent id="main_startevent" name=""/>
+        <sequenceFlow sourceRef="main_startevent" targetRef="main_task1"/>
+
+        <!-- MAIN TASK 1 -->
+        <!-- *********** -->
+        <manualTask id="main_task1" name="Reise planen" />
+        <sequenceFlow sourceRef="main_task1" targetRef="main_subprocess"/>
+
+        <!-- MAIN SUB PROCESS -->
+        <!-- **************** -->
+        <transaction id="main_subprocess" >
+
+            <!-- Start Event -->
+            <!-- *********** -->
+            <startEvent id="sub_start" name=""/>
+            <sequenceFlow sourceRef="sub_start" targetRef="sub_task1"/>
+
+            <!-- Task 1 -->
+            <!-- ****** -->
+            <manualTask id="sub_task1" name="Besuch verabreden" />
+            <boundaryEvent id="sub_boundaryevent1" attachedToRef="sub_task1">
+                <compensateEventDefinition />
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_boundaryevent1" targetRef="sub_task2"/>
+            <sequenceFlow sourceRef="sub_task1" targetRef="sub_task3"/>
+
+            <!-- Task 2 -->
+            <!-- ****** -->
+            <manualTask id="sub_task2" name="Besuch absagen" isForCompensation="true" />
+
+            <!-- Task 3 -->
+            <!-- ****** -->
+            <manualTask id="sub_task3" name="Flug buchen" />
+            <sequenceFlow sourceRef="sub_task3" targetRef="sub_task4"/>
+
+            <!-- Task 4 -->
+            <!-- ****** -->
+            <manualTask id="sub_task4" name="Hotel buchen" />
+            <boundaryEvent id="sub_boundaryevent2" attachedToRef="sub_task4">
+                <compensateEventDefinition />
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_boundaryevent2" targetRef="sub_task5"/>
+            <boundaryEvent id="sub_boundaryevent3" attachedToRef="sub_task4">
+                <errorEventDefinition />
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_boundaryevent3" targetRef="sub_task6"/>
+            <sequenceFlow sourceRef="sub_task4" targetRef="sub_task7"/>
+
+            <!-- Task 5 -->
+            <!-- ****** -->
+            <manualTask id="sub_task5" name="Hotel stornieren" isForCompensation="true" />
+
+            <!-- Task 6 -->
+            <!-- ****** -->
+            <manualTask id="sub_task6" name="Alternatives Hotel buchen" />
+            <boundaryEvent id="sub_boundaryevent4" attachedToRef="sub_task6">
+                <compensateEventDefinition id="Id_870ac1f3-9950-4704-b512-1f6a48878ecd"/>
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_boundaryevent4" targetRef="sub_task5"/>
+            <boundaryEvent id="sub_boundaryevent5" attachedToRef="sub_task6">
+                <errorEventDefinition />
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_boundaryevent5" targetRef="sub_endevent1"/>
+            <endEvent id="sub_endevent1" name="">
+                <cancelEventDefinition />
+            </endEvent>
+            <sequenceFlow id="sub_flow6" sourceRef="sub_task6" targetRef="sub_task7"/>
+
+            <!-- TASK 7 -->
+            <!-- ****** -->
+            <manualTask id="sub_task7" name="Urlaub beantragen" />
+            <boundaryEvent id="sub_boundaryevent6" attachedToRef="sub_task7">
+                <errorEventDefinition />
+            </boundaryEvent>
+            <sequenceFlow sourceRef="sub_task7" targetRef="sub_endevent2"/>
+            <sequenceFlow sourceRef="sub_boundaryevent6" targetRef="sub_endevent3"/>
+
+            <!-- END EVENT 2 -->
+            <!-- *********** -->
+            <endEvent id="sub_endevent2" name=""/>
+
+            <!-- END EVENT 3 -->
+            <!-- *********** -->
+            <endEvent id="sub_endevent3" name="">
+                <cancelEventDefinition />
+            </endEvent>
+
+        </transaction>
+
+        <sequenceFlow sourceRef="main_subprocess" targetRef="main_task2"/>
+        <manualTask id="main_task2" name="Reise antreten" />
+        <sequenceFlow sourceRef="main_task2" targetRef="main_endevent"/>
+        <endEvent id="main_endevent" name=""/>
+
+        <boundaryEvent id="main-boundary-subprocess" attachedToRef="main_subprocess">
+            <cancelEventDefinition />
+        </boundaryEvent>
+        <sequenceFlow sourceRef="main-boundary-subprocess" targetRef="main_task1"/>
+
+    </process>
+</definitions>

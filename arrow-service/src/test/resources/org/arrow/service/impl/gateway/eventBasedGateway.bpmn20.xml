@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.arrow.org/test">
+
+	<signal id="eventBasedGatewayTest_signal1" />
+	<message id="eventBasedGatewayTest_message1" />
+
+	<process id="eventBasedGatewayTest1" isExecutable="true">
+		<startEvent id="startevent1" name="Start" />
+		<sequenceFlow id="flow1" sourceRef="startevent1"
+			targetRef="gateway1">
+		</sequenceFlow>
+		<eventBasedGateway id="gateway1" />
+		<sequenceFlow id="flow2" sourceRef="gateway1" targetRef="event1" />
+		<sequenceFlow id="flow3" sourceRef="gateway1" targetRef="event2" />
+		<intermediateCatchEvent id="event1">
+			<signalEventDefinition signalRef="eventBasedGatewayTest_signal1" />
+		</intermediateCatchEvent>
+		<intermediateCatchEvent id="event2">
+			<messageEventDefinition messageRef="eventBasedGatewayTest_message1" />
+		</intermediateCatchEvent>
+		<sequenceFlow id="flow4" sourceRef="event1" targetRef="endevent1" />
+		<sequenceFlow id="flow5" sourceRef="event2" targetRef="endevent1" />
+		<endEvent id="endevent1" name="End" />
+	</process>
+
+    <signal id="eventBasedGatewayTest_signal2" />
+    <message id="eventBasedGatewayTest_message2" />
+
+    <process id="eventBasedGatewayTest2" isExecutable="true">
+        <startEvent id="startevent2" />
+        <sequenceFlow id="flow6" sourceRef="startevent2" targetRef="gateway2" />
+        <eventBasedGateway id="gateway2" eventGatewayType="Parallel" />
+        <sequenceFlow id="flow7" sourceRef="gateway2" targetRef="event3" />
+        <sequenceFlow id="flow8" sourceRef="gateway2" targetRef="event4" />
+        <intermediateCatchEvent id="event3">
+            <signalEventDefinition signalRef="eventBasedGatewayTest_signal2" />
+        </intermediateCatchEvent>
+        <intermediateCatchEvent id="event4">
+            <messageEventDefinition messageRef="eventBasedGatewayTest_message2" />
+        </intermediateCatchEvent>
+        <sequenceFlow id="flow9" sourceRef="event3" targetRef="endevent2" />
+        <sequenceFlow id="flow10" sourceRef="event4" targetRef="endevent2" />
+        <endEvent id="endevent2" />
+    </process>
+
+</definitions>

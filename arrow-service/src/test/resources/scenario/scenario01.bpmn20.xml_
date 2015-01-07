@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="_2014111000619" targetNamespace="http://www.bizagi.com/definitions/_2014111000619" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL">
+    <process id="Id_7fe9fe1b-fdf1-4506-8a5f-14c771eb0850" name="Main Process">
+        <documentation />
+        <task id="Id_61e8c9dd-5e22-4880-96de-99bebc57f093" name="Reise planen">
+            <incoming>Id_2fc1b594-3862-4326-939d-b64e2436d286</incoming>
+            <incoming>Id_e83f95d2-05aa-492e-8c66-ee9ab5c5686a</incoming>
+            <outgoing>Id_3a167811-c3fc-44ee-9216-64ee1fda0ad7</outgoing>
+        </task>
+        <startEvent id="Id_3c22856e-9c99-4e61-a753-57a633b5b2f4" name="">
+            <outgoing>Id_2fc1b594-3862-4326-939d-b64e2436d286</outgoing>
+        </startEvent>
+        <sequenceFlow id="Id_2fc1b594-3862-4326-939d-b64e2436d286" sourceRef="Id_3c22856e-9c99-4e61-a753-57a633b5b2f4" targetRef="Id_61e8c9dd-5e22-4880-96de-99bebc57f093">
+        </sequenceFlow>
+        <task id="Id_9c8c2eee-b3b9-4dfc-8073-930e4098b2b6" name="Besuch verabreden">
+        </task>
+        <sequenceFlow id="Id_3a167811-c3fc-44ee-9216-64ee1fda0ad7" sourceRef="Id_61e8c9dd-5e22-4880-96de-99bebc57f093" targetRef="Id_196d665a-583f-4b40-8e0b-6e6be8a13742">
+        </sequenceFlow>
+        <task id="Id_e791f5dd-c1a5-4d6c-958d-a1d15ab6488e" name="Reise antreten">
+            <incoming>Id_320e8977-9a61-4595-bb73-811393c31f32</incoming>
+            <outgoing>Id_7db2cf04-8f06-4bb0-a7b5-2019ab3754fa</outgoing>
+        </task>
+        <sequenceFlow id="Id_320e8977-9a61-4595-bb73-811393c31f32" sourceRef="Id_196d665a-583f-4b40-8e0b-6e6be8a13742" targetRef="Id_e791f5dd-c1a5-4d6c-958d-a1d15ab6488e">
+        </sequenceFlow>
+        <endEvent id="Id_61eba5c7-abb1-478c-afca-91f2f6186b0c" name="">
+            <incoming>Id_7db2cf04-8f06-4bb0-a7b5-2019ab3754fa</incoming>
+        </endEvent>
+        <sequenceFlow id="Id_7db2cf04-8f06-4bb0-a7b5-2019ab3754fa" sourceRef="Id_e791f5dd-c1a5-4d6c-958d-a1d15ab6488e" targetRef="Id_61eba5c7-abb1-478c-afca-91f2f6186b0c">
+        </sequenceFlow>
+        <boundaryEvent id="Id_0539bcd6-fe5a-4228-8443-303c3e4fe550" attachedToRef="Id_196d665a-583f-4b40-8e0b-6e6be8a13742">
+            <outgoing>Id_e83f95d2-05aa-492e-8c66-ee9ab5c5686a</outgoing>
+            <cancelEventDefinition id="Id_9a366601-9f70-4ec2-9155-7b7f3e3730f7" />
+        </boundaryEvent>
+        <sequenceFlow id="Id_e83f95d2-05aa-492e-8c66-ee9ab5c5686a" sourceRef="Id_0539bcd6-fe5a-4228-8443-303c3e4fe550" targetRef="Id_61e8c9dd-5e22-4880-96de-99bebc57f093">
+        </sequenceFlow>
+        <transaction id="Id_196d665a-583f-4b40-8e0b-6e6be8a13742" name="">
+            <incoming>Id_3a167811-c3fc-44ee-9216-64ee1fda0ad7</incoming>
+            <outgoing>Id_320e8977-9a61-4595-bb73-811393c31f32</outgoing>
+            <startEvent id="Id_9f24981d-e7b1-4d75-99d1-5566b4500ce2" name="">
+                <outgoing>Id_4b87b020-ed5b-4569-9c96-5ef48d091bbc</outgoing>
+            </startEvent>
+            <task id="Id_da0f7ad0-6b71-4c66-8763-280f84fe27a2" name="Besuch verabreden">
+                <incoming>Id_4b87b020-ed5b-4569-9c96-5ef48d091bbc</incoming>
+                <outgoing>Id_8fd9aaef-4284-42af-a08e-a9fe99c98553</outgoing>
+            </task>
+            <boundaryEvent id="Id_8e0cd23c-3c52-47a1-9fab-0653460189ef" attachedToRef="Id_da0f7ad0-6b71-4c66-8763-280f84fe27a2">
+                <compensateEventDefinition id="Id_e781c128-c3ed-4841-aeee-53a5d0f5184b" />
+            </boundaryEvent>
+            <task id="Id_d8c80c7f-5271-45d1-975b-e8e80c32128b" name="Besuch absagen" isForCompensation="true">
+            </task>
+            <task id="Id_6a879a93-1991-4c7c-a2b3-938f412efb4a" name="Flug buchen">
+                <incoming>Id_8fd9aaef-4284-42af-a08e-a9fe99c98553</incoming>
+                <outgoing>Id_a725d893-c7a5-4d60-89d2-c3d79c758586</outgoing>
+            </task>
+            <task id="Id_6b58f5e4-da51-4a1b-975a-dc24d5575fc5" name="Hotel buchen">
+                <incoming>Id_a725d893-c7a5-4d60-89d2-c3d79c758586</incoming>
+                <outgoing>Id_a0a4454f-dc39-4180-afce-bebb9d1ab404</outgoing>
+            </task>
+            <task id="Id_218c32ed-956f-4e7b-8f15-245b4e0d8f86" name="Hotel stornieren" isForCompensation="true">
+            </task>
+            <boundaryEvent id="Id_f679826d-c3d4-4506-80d2-a21048da8722" attachedToRef="Id_6b58f5e4-da51-4a1b-975a-dc24d5575fc5">
+                <compensateEventDefinition id="Id_2f8811bd-a644-47ff-85a4-c53a455b8c1e" />
+            </boundaryEvent>
+            <task id="Id_f51cdac7-c667-4f0d-ab28-02f44e817dd3" name="Alternatives Hotel buchen">
+                <incoming>Id_94150d81-bb02-42b2-831a-92d84204addf</incoming>
+                <outgoing>Id_d12ea437-15f8-4079-98e6-64e8881286e2</outgoing>
+            </task>
+            <task id="Id_3dc44627-83bd-42c0-830d-fec81380417c" name="Urlaub beantragen">
+                <incoming>Id_a0a4454f-dc39-4180-afce-bebb9d1ab404</incoming>
+                <incoming>Id_d12ea437-15f8-4079-98e6-64e8881286e2</incoming>
+                <outgoing>Id_8e65d2b8-c1d9-4f21-ac58-7841877c707d</outgoing>
+            </task>
+            <boundaryEvent id="Id_8ce8a911-6265-4f3a-9d3d-bd58517dee90" attachedToRef="Id_3dc44627-83bd-42c0-830d-fec81380417c">
+                <outgoing>Id_397cc3e3-50e3-4bb9-92b0-f1199d523ecf</outgoing>
+                <errorEventDefinition id="Id_b06ad2dc-3885-4ec1-ba5d-5c488e547d06" />
+            </boundaryEvent>
+            <sequenceFlow id="Id_397cc3e3-50e3-4bb9-92b0-f1199d523ecf" sourceRef="Id_8ce8a911-6265-4f3a-9d3d-bd58517dee90" targetRef="Id_68a04f31-2e9e-4529-a773-f65770063243">
+            </sequenceFlow>
+            <boundaryEvent id="Id_35fd498b-e676-4936-a623-c9228455dcfd" attachedToRef="Id_f51cdac7-c667-4f0d-ab28-02f44e817dd3">
+                <compensateEventDefinition id="Id_870ac1f3-9950-4704-b512-1f6a48878ecd" />
+            </boundaryEvent>
+            <boundaryEvent id="Id_d5214fb6-eb0d-427c-8ad8-502e2e56103a" attachedToRef="Id_f51cdac7-c667-4f0d-ab28-02f44e817dd3">
+                <outgoing>Id_9657c8cb-d0de-4cde-9093-60eb78a31ebb</outgoing>
+                <errorEventDefinition id="Id_67b4b6f7-4fb8-4095-b11b-98245495a65e" />
+            </boundaryEvent>
+            <sequenceFlow id="Id_9657c8cb-d0de-4cde-9093-60eb78a31ebb" sourceRef="Id_d5214fb6-eb0d-427c-8ad8-502e2e56103a" targetRef="Id_e2df3195-8a7b-45c0-a9bf-b6129369dc5b">
+            </sequenceFlow>
+            <endEvent id="Id_e2df3195-8a7b-45c0-a9bf-b6129369dc5b" name="">
+                <incoming>Id_9657c8cb-d0de-4cde-9093-60eb78a31ebb</incoming>
+                <cancelEventDefinition id="Id_2fdbb14c-c6d1-4a46-b7eb-e60cc6ebe645" />
+            </endEvent>
+            <sequenceFlow id="Id_a0a4454f-dc39-4180-afce-bebb9d1ab404" sourceRef="Id_6b58f5e4-da51-4a1b-975a-dc24d5575fc5" targetRef="Id_3dc44627-83bd-42c0-830d-fec81380417c">
+            </sequenceFlow>
+            <sequenceFlow id="Id_d12ea437-15f8-4079-98e6-64e8881286e2" sourceRef="Id_f51cdac7-c667-4f0d-ab28-02f44e817dd3" targetRef="Id_3dc44627-83bd-42c0-830d-fec81380417c">
+            </sequenceFlow>
+            <endEvent id="Id_68a04f31-2e9e-4529-a773-f65770063243" name="">
+                <incoming>Id_397cc3e3-50e3-4bb9-92b0-f1199d523ecf</incoming>
+                <cancelEventDefinition id="Id_80c72960-dc49-49d3-8b00-bafb39c67fee" />
+            </endEvent>
+            <sequenceFlow id="Id_8fd9aaef-4284-42af-a08e-a9fe99c98553" sourceRef="Id_da0f7ad0-6b71-4c66-8763-280f84fe27a2" targetRef="Id_6a879a93-1991-4c7c-a2b3-938f412efb4a">
+            </sequenceFlow>
+            <sequenceFlow id="Id_4b87b020-ed5b-4569-9c96-5ef48d091bbc" sourceRef="Id_9f24981d-e7b1-4d75-99d1-5566b4500ce2" targetRef="Id_da0f7ad0-6b71-4c66-8763-280f84fe27a2">
+            </sequenceFlow>
+            <sequenceFlow id="Id_a725d893-c7a5-4d60-89d2-c3d79c758586" sourceRef="Id_6a879a93-1991-4c7c-a2b3-938f412efb4a" targetRef="Id_6b58f5e4-da51-4a1b-975a-dc24d5575fc5">
+            </sequenceFlow>
+            <endEvent id="Id_e032a501-9104-4df3-b993-7e6cdfe7d045" name="">
+                <incoming>Id_8e65d2b8-c1d9-4f21-ac58-7841877c707d</incoming>
+            </endEvent>
+            <sequenceFlow id="Id_8e65d2b8-c1d9-4f21-ac58-7841877c707d" sourceRef="Id_3dc44627-83bd-42c0-830d-fec81380417c" targetRef="Id_e032a501-9104-4df3-b993-7e6cdfe7d045">
+            </sequenceFlow>
+            <boundaryEvent id="Id_73107c9b-4b18-4038-8524-22b6544a8774" attachedToRef="Id_6b58f5e4-da51-4a1b-975a-dc24d5575fc5">
+                <outgoing>Id_94150d81-bb02-42b2-831a-92d84204addf</outgoing>
+                <errorEventDefinition id="Id_235c16a5-3af7-4caf-844d-ec241586ea18" />
+            </boundaryEvent>
+            <sequenceFlow id="Id_94150d81-bb02-42b2-831a-92d84204addf" sourceRef="Id_73107c9b-4b18-4038-8524-22b6544a8774" targetRef="Id_f51cdac7-c667-4f0d-ab28-02f44e817dd3">
+            </sequenceFlow>
+            <association id="Id_db8354d7-a1af-4d9b-a353-523bbc3be154" sourceRef="Id_8e0cd23c-3c52-47a1-9fab-0653460189ef" targetRef="Id_d8c80c7f-5271-45d1-975b-e8e80c32128b">
+            </association>
+            <association id="Id_4d46e5a9-1f6b-4730-9a20-8d2f5ea8f796" sourceRef="Id_f679826d-c3d4-4506-80d2-a21048da8722" targetRef="Id_218c32ed-956f-4e7b-8f15-245b4e0d8f86">
+            </association>
+            <association id="Id_64804bc4-8bc8-42cb-baff-bd3ba27e92d7" sourceRef="Id_35fd498b-e676-4936-a623-c9228455dcfd" targetRef="Id_218c32ed-956f-4e7b-8f15-245b4e0d8f86">
+            </association>
+        </transaction>
+    </process>
+</definitions>

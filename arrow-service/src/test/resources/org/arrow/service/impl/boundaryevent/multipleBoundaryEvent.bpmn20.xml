@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test">
+
+    <!-- Non interrupting parallel boundary event -->
+    <signal id="multipleBoundaryEventTestId1_signal_parallel" name="multipleBoundaryEventTestId1_signal_parallel"/>
+    <message id="multipleBoundaryEventTestId1_message_parallel" name="multipleBoundaryEventTestId1_message_parallel"/>
+
+    <process id="multipleBoundaryEventTest_parallel" name="Process 09" isExecutable="true">
+        <startEvent id="startevent1" name="Start"/>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="serviceTask1"/>
+        <scriptTask id="serviceTask1" name="Task" scriptFormat="groovy">
+            <script>sleep 4000</script>
+        </scriptTask>
+        <sequenceFlow id="flow2" sourceRef="serviceTask1" targetRef="endevent1"/>
+        <endEvent id="endevent1" name="End"/>
+        <boundaryEvent id="boundarysignal1" name="Signal" attachedToRef="serviceTask1" cancelActivity="false"
+                       parallelMultiple="true">
+            <signalEventDefinition signalRef="multipleBoundaryEventTestId1_signal_parallel"/>
+            <messageEventDefinition messageRef="multipleBoundaryEventTestId1_message_parallel"/>
+        </boundaryEvent>
+        <endEvent id="endevent2" name="End"/>
+        <sequenceFlow id="flow3" sourceRef="boundarysignal1" targetRef="endevent2"/>
+    </process>
+
+    <!-- Interrupting parallel boundary event -->
+    <signal id="multipleBoundaryEventTestId1_signal_parallel_interrupting"
+            name="multipleBoundaryEventTestId1_signal_parallel_interrupting"/>
+    <message id="multipleBoundaryEventTestId1_message_parallel_interrupting"
+             name="multipleBoundaryEventTestId1_message_parallel_interrupting"/>
+
+    <process id="multipleBoundaryEventTest_parallel_interrupting" isExecutable="true">
+        <startEvent id="startevent_parallel_interrupting"/>
+        <sequenceFlow id="flow1_parallel_interrupting" sourceRef="startevent_parallel_interrupting"
+                      targetRef="serviceTask_parallel_interrupting"/>
+        <scriptTask id="serviceTask_parallel_interrupting" name="Task" scriptFormat="groovy">
+            <script>sleep 500</script>
+        </scriptTask>
+        <sequenceFlow id="flow2_parallel_interrupting" sourceRef="serviceTask_parallel_interrupting"
+                      targetRef="endevent1_parallel_interrupting"/>
+        <endEvent id="endevent1_parallel_interrupting"/>
+        <boundaryEvent id="boundarysignal_parallel_interrupting" attachedToRef="serviceTask_parallel_interrupting"
+                       cancelActivity="true" parallelMultiple="true">
+            <signalEventDefinition signalRef="multipleBoundaryEventTestId1_signal_parallel"/>
+            <messageEventDefinition messageRef="multipleBoundaryEventTestId1_message_parallel"/>
+        </boundaryEvent>
+        <endEvent id="endevent2_parallel_interrupting"/>
+        <sequenceFlow id="flow3_parallel_interrupting" sourceRef="boundarysignal_parallel_interrupting"
+                      targetRef="endevent2_parallel_interrupting"/>
+    </process>
+
+    <!-- Non interrupting non parallel boundary event -->
+    <signal id="multipleBoundaryEventTestId1_signal_nonparallel"
+            name="multipleBoundaryEventTestId1_signal_nonparallel"/>
+    <message id="multipleBoundaryEventTestId1_message_nonparallel"
+             name="multipleBoundaryEventTestId1_message_nonparallel"/>
+
+    <process id="multipleBoundaryEventTest_nonparallel" isExecutable="true">
+        <startEvent id="startevent2" />
+        <sequenceFlow sourceRef="startevent2" targetRef="serviceTask2"/>
+        <scriptTask id="serviceTask2" scriptFormat="groovy">
+            <script>sleep 1000</script>
+        </scriptTask>
+        <sequenceFlow sourceRef="serviceTask2" targetRef="endevent3"/>
+        <endEvent id="endevent3" name="End"/>
+        <boundaryEvent id="boundarysignal2" attachedToRef="serviceTask2" cancelActivity="false" parallelMultiple="false">
+            <signalEventDefinition signalRef="multipleBoundaryEventTestId1_signal_nonparallel"/>
+            <messageEventDefinition messageRef="multipleBoundaryEventTestId1_message_nonparallel"/>
+        </boundaryEvent>
+        <endEvent id="endevent4" name="End"/>
+        <sequenceFlow sourceRef="boundarysignal2" targetRef="endevent4"/>
+    </process>
+
+    <!-- Interrupting non parallel boundary event -->
+    <signal id="multipleBoundaryEventTestId1_signal_nonparallel_interrupting"
+            name="multipleBoundaryEventTestId1_signal_nonparallel_interrupting"/>
+    <message id="multipleBoundaryEventTestId1_message_nonparallel_interrupting"
+             name="multipleBoundaryEventTestId1_message_nonparallel_interrupting"/>
+
+    <process id="multipleBoundaryEventTest_nonparallel_interrupting" isExecutable="true">
+        <startEvent id="startevent_nonparallel_interrupting"/>
+        <sequenceFlow id="flow1_nonparallel_interrupting" sourceRef="startevent_nonparallel_interrupting"
+                      targetRef="serviceTask_nonparallel_interrupting"/>
+        <scriptTask id="serviceTask_nonparallel_interrupting" name="Task" scriptFormat="groovy">
+            <script>sleep 500</script>
+        </scriptTask>
+        <sequenceFlow id="flow2_nonparallel_interrupting" sourceRef="serviceTask_nonparallel_interrupting"
+                      targetRef="endevent1_nonparallel_interrupting"/>
+        <endEvent id="endevent1_nonparallel_interrupting"/>
+        <boundaryEvent id="boundarysignal_nonparallel_interrupting" attachedToRef="serviceTask_nonparallel_interrupting"
+                       cancelActivity="true" parallelMultiple="true">
+            <signalEventDefinition signalRef="multipleBoundaryEventTestId1_signal_nonparallel"/>
+            <messageEventDefinition messageRef="multipleBoundaryEventTestId1_message_nonparallel"/>
+        </boundaryEvent>
+        <endEvent id="endevent2_nonparallel_interrupting"/>
+        <sequenceFlow id="flow3_nonparallel_interrupting" sourceRef="boundarysignal_nonparallel_interrupting"
+                      targetRef="endevent2_nonparallel_interrupting"/>
+    </process>
+
+</definitions>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.arrow.org/test" id="asdf">
+
+    <process id="scenario01-transaction-with-errors" name="Main Process" >
+
+        <!-- Start Event -->
+        <!-- *********** -->
+        <startEvent id="main_startevent" name="" />
+        <sequenceFlow id="main_flow1" sourceRef="main_startevent" targetRef="main_task1"/>
+
+        <!-- MAIN TASK 1 -->
+        <!-- *********** -->
+        <scriptTask id="main_task1" name="Reise planen" scriptFormat="groovy">
+            <script>
+                sleep 100
+            </script>
+        </scriptTask>
+        <sequenceFlow id="main_flow2" sourceRef="main_task1" targetRef="main_subprocess"/>
+
+        <!-- MAIN SUB PROCESS -->
+        <!-- **************** -->
+        <transaction id="main_subprocess" >
+
+            <!-- Start Event -->
+            <!-- *********** -->
+            <startEvent id="sub_start" name=""/>
+            <sequenceFlow id="sub_flow1" sourceRef="sub_start" targetRef="sub_task1"/>
+
+            <!-- Task 1 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task1" name="Besuch verabreden" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+            <boundaryEvent id="sub_boundaryevent1" attachedToRef="sub_task1">
+                <compensateEventDefinition id="Id_e781c128-c3ed-4841-aeee-53a5d0f5184b" activityRef="sub_task1"/>
+            </boundaryEvent>
+
+            <sequenceFlow id="sub_flow3" sourceRef="sub_task1" targetRef="sub_task3"/>
+
+            <!-- Task 2 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task2" name="Besuch absagen" isForCompensation="true" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+
+
+
+            <!-- Task 3 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task3" name="Flug buchen" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+            <sequenceFlow id="sub_flow4" sourceRef="sub_task3" targetRef="sub_task4"/>
+
+            <!-- Task 4 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task4" name="Hotel buchen" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+
+            <boundaryEvent id="sub_boundaryevent3" attachedToRef="sub_task4">
+                <compensateEventDefinition/>
+            </boundaryEvent>
+            <sequenceFlow id="sub_flow_10" sourceRef="sub_task4" targetRef="sub_task7"/>
+
+            <!-- Task 5 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task5" name="Hotel stornieren" isForCompensation="true" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+
+            <!-- TASK 7 -->
+            <!-- ****** -->
+            <scriptTask id="sub_task7" name="Urlaub beantragen" scriptFormat="groovy">
+                <script>
+                    sleep 100
+                </script>
+            </scriptTask>
+
+            <sequenceFlow id="Id_d12ea437-15f8-4079-98e6-64e8881286e2" sourceRef="sub_task7" targetRef="sub_endevent2"/>
+
+            <!-- END EVENT 2 -->
+            <!-- *********** -->
+            <endEvent id="sub_endevent2" name="">
+                <cancelEventDefinition id="Id_80c72960-dc49-49d3-8b00-bafb39c67feeasd"/>
+            </endEvent>
+
+            <sequenceFlow id="a" sourceRef="sub_boundaryevent3" targetRef="sub_task5" />
+            <sequenceFlow id="b" sourceRef="sub_boundaryevent1" targetRef="sub_task2"/>
+
+        </transaction>
+
+        <sequenceFlow id="main_flow3" sourceRef="main_subprocess" targetRef="main_task2"/>
+        <scriptTask id="main_task2" name="Reise antreten" scriptFormat="groovy">
+            <script>
+                sleep 100
+            </script>
+        </scriptTask>
+        <sequenceFlow id="main_flow4" sourceRef="main_task2" targetRef="main_endevent"/>
+        <endEvent id="main_endevent" name=""/>
+
+        <boundaryEvent id="main-boundary-subprocess" attachedToRef="main_subprocess">
+            <cancelEventDefinition id="main-boundary-subprocess-event"/>
+        </boundaryEvent>
+        <sequenceFlow id="main_flow5" sourceRef="main-boundary-subprocess" targetRef="main_endevent"/>
+
+    </process>
+</definitions>
+
+

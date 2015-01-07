@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.arrow.org/test">
+
+    <message id="message" name="multipleIntermediateCatchEventTestNonParallel"/>
+    <signal id="testsignal" name="multipleIntermediateCatchEventTestNonParallel"/>
+
+    <process id="multipleIntermediateCatchEventTestNonParallel" isExecutable="true">
+        <startEvent id="startevent1" name="Start"/>
+        <sequenceFlow id="flow1" targetRef="catch1" sourceRef="startevent1"/>
+        <intermediateCatchEvent id="catch1">
+            <messageEventDefinition messageRef="multipleIntermediateCatchEventTestNonParallel"/>
+            <signalEventDefinition signalRef="multipleIntermediateCatchEventTestNonParallel"/>
+        </intermediateCatchEvent>
+        <sequenceFlow id="flow2" targetRef="endevent1" sourceRef="catch1"/>
+        <endEvent id="endevent1" name="End"/>
+    </process>
+
+    <message id="message2" name="multipleIntermediateCatchEventTestParallel"/>
+    <signal id="testsignal2" name="multipleIntermediateCatchEventTestParallel"/>
+
+    <process id="multipleIntermediateCatchEventTestParallel" isExecutable="true">
+        <startEvent id="startevent2" name="Start"/>
+        <sequenceFlow id="flow3" targetRef="catch2" sourceRef="startevent2"/>
+        <intermediateCatchEvent id="catch2" parallelMultiple="true">
+            <messageEventDefinition messageRef="multipleIntermediateCatchEventTestParallel"/>
+            <signalEventDefinition signalRef="multipleIntermediateCatchEventTestParallel"/>
+        </intermediateCatchEvent>
+        <sequenceFlow id="flow4" targetRef="endevent2" sourceRef="catch2"/>
+        <endEvent id="endevent2" name="End"/>
+    </process>
+
+</definitions>

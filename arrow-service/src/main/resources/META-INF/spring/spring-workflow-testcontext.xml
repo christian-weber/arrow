@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<tx:annotation-driven />
+
+	<bean class="com.thoughtworks.xstream.XStream" />
+
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="org.arrow.parser.xml.bpmn.field.ConditionExpressionConverter.StringConverter" />
+				<bean class="org.arrow.parser.xml.bpmn.field.ConditionExpressionConverter.ObjectConverter" />
+				<bean class="org.arrow.parser.xml.bpmn.field.TimerEventDefinitionConverter.StringConverter" />
+				<bean class="org.arrow.parser.xml.bpmn.field.TimerEventDefinitionConverter.ObjectConverter" />
+				<bean class="org.arrow.parser.xml.bpmn.field.ConditionalEventDefinitionConverter.StringConverter" />
+				<bean class="org.arrow.parser.xml.bpmn.field.ConditionalEventDefinitionConverter.ObjectConverter" />
+
+                <bean class="org.arrow.parser.xml.bpmn.field.MapConverter.StringConverter" />
+                <bean class="org.arrow.parser.xml.bpmn.field.MapConverter.ObjectConverter" />
+                <bean class="org.arrow.parser.xml.bpmn.field.RuleDataConverter.StringConverter" />
+                <bean class="org.arrow.parser.xml.bpmn.field.RuleDataConverter.ObjectConverter" />
+			</set>
+		</property>
+	</bean>
+
+	<bean id="processScope" class="org.arrow.runtime.scope.ProcessScope" />
+
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="process" value-ref="processScope" />
+			</map>
+		</property>
+	</bean>
+
+	<task:scheduler id="workflowScheduler" />
+
+	<bean class="org.arrow.service.impl.BusinessConditionBean"
+		id="conditionBean" />
+	<bean class="org.arrow.service.impl.BusinessConditionBean"
+		id="conditionBean21" />
+
+	<bean class="org.arrow.service.engine.config.EngineConfiguration" />
+	<bean class="org.arrow.data.Neo4JDataConfiguration" />
+    <bean class="org.arrow.runtime.RuntimeConfiguration" />
+
+</beans>

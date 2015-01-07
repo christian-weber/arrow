@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test">
+
+    <!-- Interrupting boundary event -->
+    <signal id="signalBoundaryEventTestId" name="signalBoundaryEventTest"/>
+
+    <process id="signalBoundaryEventTest" name="Process 09" isExecutable="true">
+        <startEvent id="startevent1" name="Start"/>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="serviceTask1"/>
+        <scriptTask id="serviceTask1" name="Task" scriptFormat="groovy">
+            <script>sleep 2000</script>
+        </scriptTask>
+        <sequenceFlow id="flow2" sourceRef="serviceTask1" targetRef="endevent1"/>
+        <endEvent id="endevent1" name="End"/>
+        <boundaryEvent id="boundarysignal1" name="Signal" attachedToRef="serviceTask1" cancelActivity="true">
+            <signalEventDefinition signalRef="signalBoundaryEventTest"/>
+        </boundaryEvent>
+        <endEvent id="endevent2" name="End"/>
+        <sequenceFlow id="flow3" sourceRef="boundarysignal1" targetRef="endevent2"/>
+    </process>
+
+    <!-- Non interrupting boundary event -->
+    <signal id="signalBoundaryEventTestId2" name="signalBoundaryEventTest2"/>
+
+    <process id="signalBoundaryEventTest2" isExecutable="true">
+        <startEvent id="startevent2" name="Start"/>
+        <sequenceFlow id="flow4" sourceRef="startevent2" targetRef="serviceTask2"/>
+        <scriptTask id="serviceTask2" name="Task" scriptFormat="groovy">
+            <script>sleep 500</script>
+        </scriptTask>
+        <sequenceFlow id="flow5" sourceRef="serviceTask2" targetRef="endevent3"/>
+        <endEvent id="endevent3" name="End"/>
+        <boundaryEvent id="boundarysignal2" name="Signal" attachedToRef="serviceTask2" cancelActivity="false">
+            <signalEventDefinition signalRef="signalBoundaryEventTest"/>
+        </boundaryEvent>
+        <endEvent id="endevent4" name="End"/>
+        <sequenceFlow id="flow6" sourceRef="boundarysignal2" targetRef="endevent4"/>
+    </process>
+
+</definitions>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test">
+
+    <process id="parallelGatewayTest">
+        <startEvent id="startevent1"/>
+        <sequenceFlow sourceRef="startevent1" targetRef="parallelgateway1"/>
+        <parallelGateway id="parallelgateway1"/>
+        <sequenceFlow sourceRef="parallelgateway1" targetRef="servicetask1"/>
+        <sequenceFlow sourceRef="parallelgateway1" targetRef="servicetask2"/>
+        <manualTask id="servicetask1" />
+        <manualTask id="servicetask2" />
+        <sequenceFlow sourceRef="servicetask1" targetRef="endevent1"/>
+        <sequenceFlow sourceRef="servicetask2" targetRef="endevent2"/>
+        <endEvent id="endevent1"/>
+        <endEvent id="endevent2"/>
+    </process>
+
+    <process id="parallelGatewayTest2">
+        <startEvent id="B_startevent1"/>
+        <sequenceFlow sourceRef="B_startevent1" targetRef="B_parallelgateway1"/>
+        <parallelGateway id="B_parallelgateway1"/>
+        <sequenceFlow sourceRef="B_parallelgateway1" targetRef="B_servicetask1"/>
+        <sequenceFlow sourceRef="B_parallelgateway1" targetRef="B_servicetask2"/>
+        <manualTask id="B_servicetask1" />
+        <manualTask id="B_servicetask2" />
+        <sequenceFlow sourceRef="B_servicetask1" targetRef="B_parallelgateway2"/>
+        <sequenceFlow sourceRef="B_servicetask2" targetRef="B_parallelgateway2"/>
+        <parallelGateway id="B_parallelgateway2"/>
+        <sequenceFlow sourceRef="B_parallelgateway2" targetRef="B_endevent1"/>
+        <endEvent id="B_endevent1"/>
+    </process>
+
+    <process id="parallelGatewayTest3">
+        <startEvent id="C_startevent1"/>
+        <sequenceFlow sourceRef="C_startevent1" targetRef="C_parallelgateway1"/>
+        <parallelGateway id="C_parallelgateway1"/>
+        <sequenceFlow sourceRef="C_parallelgateway1" targetRef="C_parallelgateway2"/>
+        <sequenceFlow sourceRef="C_parallelgateway1" targetRef="C_servicetask1"/>
+        <parallelGateway id="C_parallelgateway2"/>
+        <sequenceFlow sourceRef="C_parallelgateway2" targetRef="C_servicetask2"/>
+        <sequenceFlow sourceRef="C_parallelgateway2" targetRef="C_servicetask3"/>
+        <manualTask id="C_servicetask1" />
+        <manualTask id="C_servicetask2" />
+        <manualTask id="C_servicetask3" />
+        <sequenceFlow sourceRef="C_servicetask2" targetRef="C_parallelgateway3"/>
+        <sequenceFlow sourceRef="C_servicetask3" targetRef="C_parallelgateway3"/>
+        <parallelGateway id="C_parallelgateway3"/>
+        <sequenceFlow sourceRef="C_servicetask1" targetRef="C_parallelgateway4"/>
+        <sequenceFlow sourceRef="C_parallelgateway3" targetRef="C_parallelgateway4"/>
+        <parallelGateway id="C_parallelgateway4"/>
+        <sequenceFlow sourceRef="C_parallelgateway4" targetRef="C_endevent1"/>
+        <endEvent id="C_endevent1"/>
+    </process>
+
+</definitions>

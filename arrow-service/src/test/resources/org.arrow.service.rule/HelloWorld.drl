@@ -1,0 +1,25 @@
+package org.arrow.service.rule.helloworld
+import org.arrow.service.impl.WorkflowTaskTest.RuleObject
+
+global java.util.List list
+
+rule "Rule 1"
+dialect "mvel"
+
+when
+    m : RuleObject( status == RuleObject.STATUS_1, status : status )
+then
+    System.out.println( status );
+    // modify ( m ) { setStatus( Message.GOODBYE ) };
+    modify ( m ) { status = RuleObject.STATUS_2 };
+    list.add("TEST")
+end
+
+
+rule "Rule 2"
+dialect "java"
+when
+    RuleObject( status == RuleObject.STATUS_2, status : status )
+then
+    System.out.println( status );
+end

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014 Christian Weber
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.arrow.org/test" id="definitions">
+
+
+    <process id="scenario02-parallel-gateway" isExecutable="true">
+        
+        <!-- START EVENT 1 -->
+        <startEvent id="startevent1"/>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="inclusivegateway1"/>
+        
+        <!-- INCLUSIVE GATEWAY 1 -->
+        <parallelGateway id="inclusivegateway1"/>
+        <sequenceFlow id="flow2" sourceRef="inclusivegateway1" targetRef="task1">
+        </sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="inclusivegateway1" targetRef="task2">
+        </sequenceFlow>
+        <sequenceFlow id="flow4" sourceRef="inclusivegateway1" targetRef="task3">
+        </sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="inclusivegateway1" targetRef="task4">
+        </sequenceFlow>
+
+        <!-- TASK 1 -->
+        <scriptTask id="task1" scriptFormat="groovy">
+            <script>
+                sleep 1000
+            </script>
+        </scriptTask>
+        <sequenceFlow id="flow6" sourceRef="task1" targetRef="B_inclusivegateway2"/>
+
+        <!-- TASK 2 -->
+        <scriptTask id="task2" scriptFormat="groovy">
+            <script>
+                sleep 1000
+            </script>
+        </scriptTask>
+        <sequenceFlow id="B_flow9" sourceRef="task2" targetRef="B_inclusivegateway2"/>
+
+        <!-- TASK 3 -->
+        <scriptTask id="task3" scriptFormat="groovy">
+            <script>
+                sleep 1000
+            </script>
+        </scriptTask>
+        <sequenceFlow id="flow10" sourceRef="task3" targetRef="B_inclusivegateway2"/>
+
+        <!-- TASK 4 -->
+        <scriptTask id="task4" scriptFormat="groovy">
+            <script>
+                sleep 1000
+            </script>
+        </scriptTask>
+        <sequenceFlow id="flow11" sourceRef="task4" targetRef="B_inclusivegateway2"/>
+
+        <!-- Parallel GATEWAY 2 -->
+        <parallelGateway id="B_inclusivegateway2"/>
+        <sequenceFlow id="flow12" sourceRef="B_inclusivegateway2" targetRef="endevent1"/>
+        
+        <!-- END EVENT 1 -->
+        <endEvent id="endevent1" name="End"/>
+        
+        <!-- END EVENT 2 -->
+        <endEvent id="B_endevent2" name="End"/>
+    </process>
+
+</definitions>
