@@ -16,8 +16,6 @@
 
 package org.arrow.runtime.api;
 
-import org.arrow.runtime.CancellableBpmnEntity;
-
 /**
  * BPMN 2.0 start event node entity definition. All classes which implements this
  * interface are able to be handled as start events.
@@ -25,7 +23,7 @@ import org.arrow.runtime.CancellableBpmnEntity;
  * @author christian.weber
  * @since 1.0.0
  */
-public interface StartEventSpecification extends BpmnNodeEntitySpecification, CancellableBpmnEntity {
+public interface StartEventSpecification extends BpmnNodeEntitySpecification {
 
     boolean isInterrupting();
 
