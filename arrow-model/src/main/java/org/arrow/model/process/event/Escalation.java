@@ -83,11 +83,6 @@ public class Escalation extends AbstractBpmnEventDefinitionEntity {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public Long getVersion() {
-		throw new UnsupportedOperationException();
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */

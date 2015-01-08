@@ -47,6 +47,4 @@ public interface BpmnEntity extends BpmnEntitySpecification {
 	 */
 	Long getNodeId();
 
-	Long getVersion();
-	
 }

@@ -107,13 +107,6 @@ public abstract class AbstractBpmnEntity implements BpmnEntity {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public Long getVersion() {
-        return version;
-    }
-
-    /**
      * Sets the version.
      *
      * @param version the new version

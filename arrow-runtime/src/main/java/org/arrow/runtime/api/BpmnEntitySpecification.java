@@ -16,9 +16,6 @@
 
 package org.arrow.runtime.api;
 
-import org.arrow.runtime.execution.Execution;
-import org.arrow.runtime.execution.service.ExecutionService;
-
 /**
  * BPMN 2.0 node definition. All classes which implements this
  * interface are able to be handled by the process engine.
