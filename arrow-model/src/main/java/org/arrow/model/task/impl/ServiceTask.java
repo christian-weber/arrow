@@ -95,4 +95,19 @@ public class ServiceTask extends AbstractTask {
 		this.serviceClass = serviceClass;
 	}
 
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+
+	public String getBeanName() {
+		return beanName;
+	}
+
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
 }

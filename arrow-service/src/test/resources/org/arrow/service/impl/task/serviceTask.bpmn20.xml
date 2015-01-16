@@ -34,4 +34,29 @@
         <endEvent id="endevent1" name="End"/>
     </process>
 
+    <process id="B_SERVICE_TASK_WORKFLOW_TEST" isExecutable="true">
+        <startEvent id="B_startevent1"/>
+        <sequenceFlow sourceRef="B_startevent1" targetRef="B_servicetask1"/>
+        <serviceTask id="B_servicetask1">
+            <extensionElements>
+                <extension:beanName>javaDelegateBean</extension:beanName>
+            </extensionElements>
+        </serviceTask>
+        <sequenceFlow sourceRef="B_servicetask1" targetRef="B_endevent1"/>
+        <endEvent id="B_endevent1" name="End"/>
+    </process>
+
+    <process id="C_SERVICE_TASK_WORKFLOW_TEST" isExecutable="true">
+        <startEvent id="C_startevent1"/>
+        <sequenceFlow sourceRef="C_startevent1" targetRef="C_servicetask1"/>
+        <serviceTask id="C_servicetask1">
+            <extensionElements>
+                <extension:expression>@expressionBean.execute()</extension:expression>
+            </extensionElements>
+        </serviceTask>
+        <sequenceFlow sourceRef="C_servicetask1" targetRef="C_endevent1"/>
+        <endEvent id="C_endevent1" name="End"/>
+    </process>
+
+
 </definitions>

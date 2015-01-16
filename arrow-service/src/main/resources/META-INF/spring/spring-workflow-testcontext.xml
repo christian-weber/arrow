@@ -67,4 +67,8 @@ http://www.springframework.org/schema/tx
 	<bean class="org.arrow.data.Neo4JDataConfiguration" />
     <bean class="org.arrow.runtime.RuntimeConfiguration" />
 
+	<!-- Test environment beans -->
+	<bean id="javaDelegateBean" class="org.arrow.service.impl.JavaDelegateBean" />
+	<bean id="expressionBean" class="org.arrow.service.impl.ExpressionBean" />
+
 </beans>

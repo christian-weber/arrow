@@ -128,7 +128,7 @@ public class DefaultExecutionService implements ExecutionService {
         ec.setBeanResolver(new BeanFactoryResolver(context));
         Expression expr = parser.parseExpression(expression);
 
-        expr.getValue();
+        expr.getValue(ec);
     }
 
     /**

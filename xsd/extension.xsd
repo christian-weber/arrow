@@ -65,6 +65,20 @@
             <!--<attribute name="format" type="string" use="required" />-->
         <!--</complexType>-->
     </element>
+    <element name="beanName">
+        <annotation>
+            <documentation>
+                The name of the spring bean to execute
+            </documentation>
+        </annotation>
+    </element>
+    <element name="expression">
+        <annotation>
+            <documentation>
+                The expression to evaluate
+            </documentation>
+        </annotation>
+    </element>
 
     <annotation>
         <documentation>

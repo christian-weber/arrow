@@ -24,11 +24,11 @@ import spock.lang.Specification
 import spock.lang.Timeout
 
 @WorkflowTest
-@Timeout(10)
+//@Timeout(10)
 public class WorkflowTaskTest extends Specification implements WorkflowDslTrait {
 
     @Given("task/serviceTask.bpmn20.xml")
-    def "test task (service)"() {
+    def "test task (service, serviceClass)"() {
         when:
             def pi = startById "SERVICE_TASK_WORKFLOW_TEST"
         then:
@@ -36,6 +36,28 @@ public class WorkflowTaskTest extends Specification implements WorkflowDslTrait 
             assertSuccess pi, "startevent1"
             assertSuccess pi, "servicetask1"
             assertSuccess pi, "endevent1"
+    }
+
+    @Given("task/serviceTask.bpmn20.xml")
+    def "test task (service, beanName)"() {
+        when:
+            def pi = startById "B_SERVICE_TASK_WORKFLOW_TEST"
+        then:
+            await(pi)
+            assertSuccess pi, "B_startevent1"
+            assertSuccess pi, "B_servicetask1"
+            assertSuccess pi, "B_endevent1"
+    }
+
+    @Given("task/serviceTask.bpmn20.xml")
+    def "test task (service, expression)"() {
+        when:
+            def pi = startById "C_SERVICE_TASK_WORKFLOW_TEST"
+        then:
+            await(pi)
+            assertSuccess pi, "C_startevent1"
+            assertSuccess pi, "C_servicetask1"
+            assertSuccess pi, "C_endevent1"
     }
 
     @Given("task/manualTask.bpmn20.xml")

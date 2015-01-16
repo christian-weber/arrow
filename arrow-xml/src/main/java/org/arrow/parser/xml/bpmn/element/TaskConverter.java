@@ -39,30 +39,30 @@ import org.arrow.runtime.rule.RuleData;
  */
 public class TaskConverter implements Converter {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@SuppressWarnings("rawtypes")
-	public boolean canConvert(Class type) {
-		return Task.class.isAssignableFrom(type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public boolean canConvert(Class type) {
+        return Task.class.isAssignableFrom(type);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void marshal(Object source, HierarchicalStreamWriter writer,
-			MarshallingContext context) {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+                        MarshallingContext context) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object unmarshal(HierarchicalStreamReader reader,
-			UnmarshallingContext context) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader,
+                            UnmarshallingContext context) {
 
         final String id = reader.getAttribute("id");
         final String name = reader.getAttribute("name");
@@ -70,23 +70,30 @@ public class TaskConverter implements Converter {
 
         AbstractTask task = parseTask(reader);
 
-		task.setId(id);
-		task.setName(name);
+        task.setId(id);
+        task.setName(name);
         task.setForCompensation(isForCompensation);
 
         return task;
-	}
+    }
 
     private AbstractTask parseTask(HierarchicalStreamReader reader) {
 
         switch (reader.getNodeName()) {
-            case "serviceTask": return parseServiceTask(reader);
-            case "manualTask": return new ManualTask();
-            case "userTask": return new UserTask();
-            case "scriptTask": return parseScriptTask(reader);
-            case "sendTask": return parseSendTask(reader);
-            case "receiveTask": return parseReceiveTask(reader);
-            case "businessRuleTask": return parseBusinessRuleTask(reader);
+            case "serviceTask":
+                return parseServiceTask(reader);
+            case "manualTask":
+                return new ManualTask();
+            case "userTask":
+                return new UserTask();
+            case "scriptTask":
+                return parseScriptTask(reader);
+            case "sendTask":
+                return parseSendTask(reader);
+            case "receiveTask":
+                return parseReceiveTask(reader);
+            case "businessRuleTask":
+                return parseBusinessRuleTask(reader);
         }
 
         throw new RuntimeException();
@@ -99,8 +106,11 @@ public class TaskConverter implements Converter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             switch (truncateNamespace(reader.getNodeName())) {
-                case "script": task.setScript(reader.getValue()); break;
-                case "multiInstanceLoopCharacteristics": task.setMultiInstanceLoopCharacteristics(parseLoop(reader));
+                case "script":
+                    task.setScript(reader.getValue());
+                    break;
+                case "multiInstanceLoopCharacteristics":
+                    task.setMultiInstanceLoopCharacteristics(parseLoop(reader));
             }
             reader.moveUp();
         }
@@ -152,9 +162,15 @@ public class TaskConverter implements Converter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             switch (truncateNamespace(reader.getNodeName())) {
-                case "ruleFormat": task.setRuleFormat(reader.getAttribute("format")); break;
-                case "ruleSource": task.setRuleSource(reader.getAttribute("source")); break;
-                case "ruleData": task.getDataList().add(new RuleData(reader.getAttribute("type"), reader.getAttribute("name"))); break;
+                case "ruleFormat":
+                    task.setRuleFormat(reader.getAttribute("format"));
+                    break;
+                case "ruleSource":
+                    task.setRuleSource(reader.getAttribute("source"));
+                    break;
+                case "ruleData":
+                    task.getDataList().add(new RuleData(reader.getAttribute("type"), reader.getAttribute("name")));
+                    break;
             }
             reader.moveUp();
         }
@@ -172,7 +188,11 @@ public class TaskConverter implements Converter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             switch (truncateNamespace(reader.getNodeName())) {
-                case "serviceClass": task.setServiceClass(reader.getValue().trim());
+                // @formatter:off
+                case "serviceClass": task.setServiceClass(reader.getValue().trim()); break;
+                case "beanName":     task.setBeanName(reader.getValue().trim());     break;
+                case "expression":   task.setExpression(reader.getValue().trim());   break;
+                // @formatter:on
             }
             reader.moveUp();
         }

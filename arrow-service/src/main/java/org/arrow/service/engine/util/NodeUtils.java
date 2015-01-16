@@ -17,13 +17,11 @@
 package org.arrow.service.engine.util;
 
 import org.apache.log4j.Logger;
-import org.springframework.util.Assert;
 import org.arrow.model.transition.Flow;
 import org.arrow.model.transition.OutgoingFlowAware;
-import org.arrow.model.transition.impl.SequenceFlow;
 import org.arrow.runtime.api.BpmnNodeEntitySpecification;
-import org.arrow.runtime.message.EntityEventMessage;
 import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.message.EntityEventMessage;
 
 import java.util.Collections;
 import java.util.HashSet;
