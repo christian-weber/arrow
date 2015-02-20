@@ -17,10 +17,8 @@
 package org.arrow.service.engine.concurrent.dispatch.recover;
 
 import akka.dispatch.Recover;
-import org.apache.log4j.Logger;
 import org.arrow.runtime.logger.LoggerFacade;
 import org.arrow.runtime.message.EventMessage;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 
