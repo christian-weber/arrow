@@ -69,6 +69,10 @@ allprojects {
         compile 'org.codehaus.groovy:groovy-all:2.3.7'
 
         compile 'org.drools:drools-jsr94:6.1.0.Final'
+
+		testCompile "org.springframework:spring-beans:4.1.0.RELEASE"
+		testCompile "org.springframework:spring-context:4.1.0.RELEASE"
+		testCompile "org.springframework:spring-tx:4.1.0.RELEASE"
     }
 
 	/**
