@@ -93,7 +93,7 @@ allprojects {
 		}
 	}
 
-	String category1 = 'org.arrow.UnitTest'
+	String category1 = 'org.arrow.test.runtime.UnitTest'
 	project.task("unitTest", type:Test) {
 		useJUnit {  includeCategories category1 }
 	}
