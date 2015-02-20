@@ -15,5 +15,6 @@
  */
 
 dependencies {
-	compile project(":arrow-runtime")
+	compile project(path: ":arrow-runtime")
+	compile project(path: ":arrow-runtime", configuration: "testRuntime")
 }

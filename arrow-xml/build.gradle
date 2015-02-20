@@ -16,5 +16,5 @@
 
 dependencies {
 	compile project(":arrow-model")
-	compile project(":arrow-data")
+//	compile project(":arrow-data")
 }

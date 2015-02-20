@@ -18,21 +18,24 @@ package org.arrow.util;
 
 import junit.framework.Assert;
 
+import org.arrow.test.runtime.UnitTest;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(UnitTest.class)
 public class TriggerUtilsTest {
 
-	@Test
-	public void testIsCronTime() {
-		Assert.assertTrue(TriggerUtils.isCron("* * * * * *"));
-		Assert.assertTrue(TriggerUtils.isCron("0 0 * * * *"));
-		Assert.assertTrue(TriggerUtils.isCron("5 * * * * *"));
-		Assert.assertTrue(TriggerUtils.isCron("*/5 * * * * *"));
-		Assert.assertTrue(TriggerUtils.isCron("59 23 * * 1 *"));
-		Assert.assertTrue(TriggerUtils.isCron("20,30 1 * * 1-5 *"));
-		Assert.assertTrue(TriggerUtils.isCron("20,30 1 * * 1-5 *"));
+    @Test
+    public void testIsCronTime() {
+        Assert.assertTrue(TriggerUtils.isCron("* * * * * *"));
+        Assert.assertTrue(TriggerUtils.isCron("0 0 * * * *"));
+        Assert.assertTrue(TriggerUtils.isCron("5 * * * * *"));
+        Assert.assertTrue(TriggerUtils.isCron("*/5 * * * * *"));
+        Assert.assertTrue(TriggerUtils.isCron("59 23 * * 1 *"));
+        Assert.assertTrue(TriggerUtils.isCron("20,30 1 * * 1-5 *"));
+        Assert.assertTrue(TriggerUtils.isCron("20,30 1 * * 1-5 *"));
 
-		Assert.assertFalse(TriggerUtils.isCron("A 1 * * 1-5 *"));
-	}
-	
+        Assert.assertFalse(TriggerUtils.isCron("A 1 * * 1-5 *"));
+    }
+
 }

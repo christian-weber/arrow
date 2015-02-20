@@ -18,7 +18,7 @@ dependencies {
 	compile project(":arrow-runtime")
 	compile project(":arrow-model")
 	compile project(":arrow-xml")
-	compile project(":arrow-data")
+//	compile project(":arrow-data")
 	compile project(":arrow-data-neo4j")
 
 	compile "junit:junit:4.10"

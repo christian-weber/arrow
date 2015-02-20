@@ -93,4 +93,15 @@ allprojects {
 		}
 	}
 
+	String category1 = 'org.arrow.UnitTest'
+	project.task("unitTest", type:Test) {
+		useJUnit {  includeCategories category1 }
+	}
+
+	project.tasks.withType(Test) {
+		it.beforeTest { descriptor ->
+			logger.lifecycle(descriptor.toString())
+		}
+	}
+
 }

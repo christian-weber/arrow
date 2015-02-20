@@ -18,7 +18,7 @@ dependencies {
 	compile project(":arrow-runtime")
 	compile project(":arrow-model")
 	compile project(":arrow-test")
-	compile project(":arrow-data")
+//	compile project(":arrow-data")
 	testCompile project(":arrow-data-neo4j")
 
     compile 'org.springframework.retry:spring-retry:1.1.2.RELEASE'
