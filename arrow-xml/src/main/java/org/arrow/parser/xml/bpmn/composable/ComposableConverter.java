@@ -25,7 +25,7 @@ public interface ComposableConverter<TYPE extends EventDefinition> {
 	/**
 	 * Converts the XML to a {@link EventDefinition}
 	 * 
-	 * @param reader
+	 * @param reader the hierarchical stream reader instance
 	 * @return TYPE
 	 */
 	TYPE convert(HierarchicalStreamReader reader);
@@ -33,7 +33,7 @@ public interface ComposableConverter<TYPE extends EventDefinition> {
 	/**
 	 * Indicates if the converter supports the XML converting.
 	 * 
-	 * @param reader
+	 * @param reader the hierarchical stream reader instance
 	 * @return boolean
 	 */
 	boolean supports(HierarchicalStreamReader reader);

@@ -17,7 +17,6 @@
 package org.arrow.parser.xml.bpmn.composable;
 
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import org.arrow.model.definition.cancel.CancelEventDefinition;
 import org.arrow.model.definition.compensate.CompensateEventDefinition;
 
 /**

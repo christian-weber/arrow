@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import org.arrow.model.definition.cancel.CancelEventDefinition;
 
 /**
- * {@link org.arrow.parser.xml.bpmn.composable.ComposableConverter} implementation class for
+ * {@link ComposableConverter} implementation class for
  * {@link org.arrow.model.definition.escalation.EscalationEventDefinition} conversion.
  *
  * @author christian.weber

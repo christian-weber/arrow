@@ -43,7 +43,7 @@ public class ConditionalEventDefinitionConverter implements
 		ConditionalEventDefinition definition = new ConditionalEventDefinition();
 		definition.setId(reader.getAttribute("id"));
 		
-		Set<Condition> conditions = new HashSet<Condition>();
+		Set<Condition> conditions = new HashSet<>();
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			
