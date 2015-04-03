@@ -1,0 +1,3 @@
+moduleName = arrow-module
+moduleVersion = 1.0
+extensionClasses = org.arrow.extension.ArrowGroovyExtension
