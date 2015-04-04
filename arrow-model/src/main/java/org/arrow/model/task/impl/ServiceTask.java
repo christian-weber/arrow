@@ -16,14 +16,14 @@
 
 package org.arrow.model.task.impl;
 
-import akka.dispatch.Futures;
-import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.arrow.model.task.AbstractTask;
-import org.arrow.runtime.message.EventMessage;
 import org.arrow.runtime.api.task.JavaDelegate;
 import org.arrow.runtime.execution.Execution;
 import org.arrow.runtime.execution.service.ExecutionService;
+import org.arrow.runtime.message.EventMessage;
+import org.arrow.util.FutureUtil;
+import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.neo4j.annotation.NodeEntity;
 import scala.concurrent.Future;
 
 /**
@@ -35,8 +35,6 @@ import scala.concurrent.Future;
 @NodeEntity
 @TypeAlias("ServiceTask")
 public class ServiceTask extends AbstractTask {
-
-	private String delegate;
 
 	private String serviceClass;
 	private String expression;
@@ -55,12 +53,12 @@ public class ServiceTask extends AbstractTask {
 		}
 
 		// spring expression delegate
-		if (!isEmpty(expression)) {
+		else if (!isEmpty(expression)) {
 			service.evaluateExpression(expression);
 		}
 
 		// class delegate
-		if (!isEmpty(serviceClass)) {
+		else if (!isEmpty(serviceClass)) {
 			JavaDelegate javaDelegate = service.getJavaDelegateByClassName(serviceClass);
 			javaDelegate.execute(execution);
 		}
@@ -68,21 +66,11 @@ public class ServiceTask extends AbstractTask {
 		// mark the task as finished
 		finish(execution, service);
 
-        return Futures.successful(iterableOf());
+        return FutureUtil.result();
     }
 
-	private boolean isEmpty(String beanName) {
-		return beanName == null || beanName.length() == 0;
-	}
-
-    @SuppressWarnings("unused")
-	public String getDelegate() {
-		return delegate;
-	}
-
-    @SuppressWarnings("unused")
-	public void setDelegate(String delegate) {
-		this.delegate = delegate;
+	private boolean isEmpty(String str) {
+		return str == null || str.length() == 0;
 	}
 
     @SuppressWarnings("unused")
@@ -90,7 +78,6 @@ public class ServiceTask extends AbstractTask {
 		return serviceClass;
 	}
 
-    @SuppressWarnings("unused")
 	public void setServiceClass(String serviceClass) {
 		this.serviceClass = serviceClass;
 	}
