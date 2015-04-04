@@ -17,6 +17,7 @@
 package org.arrow.extension
 
 import com.thoughtworks.xstream.io.HierarchicalStreamReader
+import org.springframework.util.CollectionUtils
 
 /**
  * Arror groovy meta class extension module.
@@ -35,6 +36,16 @@ class ArrowGroovyExtension {
         self.moveDown()
         closure()
         self.moveUp()
+    }
+
+    /**
+     * Indicates if the given reference objects is containing.
+     *
+     * @param self
+     * @param reference
+     */
+    static void containsObject(final Set self, Object reference) {
+        !CollectionUtils.contains(self.iterator(), reference)
     }
 
 }

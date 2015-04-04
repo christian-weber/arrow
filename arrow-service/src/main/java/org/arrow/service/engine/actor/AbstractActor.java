@@ -25,6 +25,7 @@ import org.arrow.runtime.execution.service.ExecutionService;
 import org.arrow.runtime.message.EventMessage;
 import org.arrow.runtime.support.EngineSynchronizationManager;
 import scala.PartialFunction;
+import scala.concurrent.ExecutionContext;
 import scala.runtime.BoxedUnit;
 
 import java.util.Map;
@@ -120,20 +121,8 @@ public abstract class AbstractActor extends UntypedActor {
         }
     }
 
-    /**
-     * Returns the first non null argument of the given variable argument.
-     *
-     * @param objects the objects
-     * @return Object
-     */
-    protected Object firstNonNull(Object...objects) {
-        Assert.notNull(objects);
-        for (Object object : objects) {
-            if (object != null) {
-                return object;
-            }
-        }
-        return null;
+    protected ExecutionContext dispatcher() {
+        return getContext().dispatcher();
     }
 
 }

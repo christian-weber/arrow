@@ -14,32 +14,24 @@
  * limitations under the License.
  */
 
-package org.arrow.service.engine.actor.template;
+package org.arrow.service.engine.actor.template
 
-import akka.actor.ActorSystem;
-import akka.japi.Procedure;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.StopWatch;
-import org.arrow.model.definition.multiple.MultipleEventAware;
-import org.arrow.model.event.boundary.BoundaryEvent;
-import org.arrow.model.event.boundary.BoundaryEventAware;
-import org.arrow.runtime.api.BpmnNodeEntitySpecification;
-import org.arrow.runtime.execution.ProcessInstance;
-import org.arrow.runtime.logger.LoggerFacade;
-import org.arrow.runtime.message.*;
-import org.arrow.runtime.message.impl.*;
-import org.arrow.runtime.support.EngineSynchronizationManager;
-import org.arrow.service.engine.actor.AbstractActor;
-import org.arrow.service.engine.actor.receive.DefaultMessageHandlerRegistry;
-import org.arrow.service.engine.actor.receive.MessageHandlerRegistry;
-import scala.concurrent.ExecutionContextExecutor;
-
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import static org.arrow.util.Predicates.when;
+import akka.actor.ActorSystem
+import akka.japi.Procedure
+import org.arrow.model.definition.multiple.MultipleEventAware
+import org.arrow.model.event.boundary.BoundaryEvent
+import org.arrow.model.event.boundary.BoundaryEventAware
+import org.arrow.runtime.api.BpmnNodeEntitySpecification
+import org.arrow.runtime.execution.ProcessInstance
+import org.arrow.runtime.message.*
+import org.arrow.runtime.message.impl.DefaultExecuteEventMessage
+import org.arrow.runtime.message.impl.EscalationEventMessage
+import org.arrow.runtime.message.impl.MessageEventMessage
+import org.arrow.runtime.message.impl.SignalEventMessage
+import org.arrow.runtime.support.EngineSynchronizationManager
+import org.arrow.service.engine.actor.AbstractActor
+import org.springframework.context.ApplicationContext
+import scala.concurrent.ExecutionContextExecutor
 
 /**
  * Actor template class designed to handle {@link org.arrow.runtime.message.EventMessage} messages.
@@ -49,7 +41,7 @@ import static org.arrow.util.Predicates.when;
  */
 public abstract class NodeActorTemplate extends AbstractActor {
 
-    private final Procedure<Object> DEFAULT_BEHAVIOR = getDefaultBehavior();
+    private final Procedure<Object> DEFAULT_BEHAVIOR = new DefaultProcedure()
 
     public NodeActorTemplate(ApplicationContext context, Map<String, Object> scopeMap) {
         super(context, scopeMap);
@@ -64,22 +56,21 @@ public abstract class NodeActorTemplate extends AbstractActor {
         EngineSynchronizationManager.setCurrentActor(getSender());
     }
 
-    protected Procedure<Object> getDefaultBehavior() {
-        return message -> {
-            //@formatter:off
-            MessageHandlerRegistry registry = new DefaultMessageHandlerRegistry();
-            registry.register(when(noEventMessage()),                                             this::unhandled);
-            registry.register(when(SignalEventMessage.class, this::hasMultipleEventDefinitions) , this::onReceiveSignalEventMessage);
-            registry.register(when(MessageEventMessage.class, this::hasMultipleEventDefinitions), this::onReceiveMessageEventMessage);
-            registry.register(when(EscalationEventMessage.class),                                 this::onReceiveEscalationEventMessage);
-            registry.register(when(ExecuteEventMessage.class),                                    executeEventMessageConsumer);
-            registry.register(when(ContinueEventMessage.class),                                   this::onReceiveContinueMessage);
-            registry.register(when(FinishEventMessage.class),                                     this::onReceiveFinishMessage);
-            registry.register(when(msg -> true),                                                  this::unhandled);
-            //@formatter:on
+    private class DefaultProcedure implements Procedure<Object> {
 
-            registry.handle(message);
-        };
+        @Override
+        void apply(Object param) throws Exception {
+            switch (param) {
+                case {noEventMessage(it)}: unhandled(param); break
+                case {it instanceof SignalEventMessage && hasMultipleEventDefinitions(it)}: onReceiveSignalEventMessage(param); break
+                case {it instanceof MessageEventMessage && hasMultipleEventDefinitions(it)}: onReceiveMessageEventMessage(param); break
+                case EscalationEventMessage: onReceiveEscalationEventMessage(param); break
+                case ExecuteEventMessage: executeEventMessageConsumer(param); break
+                case ContinueEventMessage: onReceiveContinueMessage(param); break
+                case FinishEventMessage: onReceiveFinishMessage(param); break
+                default: unhandled(param)
+            }
+        }
     }
 
     /**
@@ -152,13 +143,13 @@ public abstract class NodeActorTemplate extends AbstractActor {
         return entity instanceof MultipleEventAware && ((MultipleEventAware) entity).getEventDefinitions().size() > 1;
     }
 
-    private Predicate<Object> noEventMessage() {
-        return msg -> !(msg instanceof EventMessage);
+    private void noEventMessage(Object msg) {
+        !(msg instanceof EventMessage);
     }
 
-    private Consumer<ExecuteEventMessage> executeEventMessageConsumer = msg -> {
-            executeBoundaryEventsIfPresent(msg);
-            onReceiveExecuteMessage(msg);
+    private void executeEventMessageConsumer(Object msg) {
+        executeBoundaryEventsIfPresent(msg);
+        onReceiveExecuteMessage(msg);
     };
 
 }
