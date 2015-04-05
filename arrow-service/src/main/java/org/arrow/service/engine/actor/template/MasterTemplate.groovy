@@ -134,10 +134,6 @@ public abstract class MasterTemplate extends AbstractActor {
 
     def noEventMessage = {!(it instanceof EventMessage);}
 
-//    private static boolean noEventMessage(Object msg) {
-//        !(msg instanceof EventMessage);
-//    }
-
     @Override
     public void unhandled(Object message) {
         LOGGER.warn("unhandled message %s", message);
@@ -150,7 +146,6 @@ public abstract class MasterTemplate extends AbstractActor {
             LOGGER.debug("handle " + msg);
             super.aroundReceive(receive, msg);
         } catch (Throwable throwable) {
-            println "###########################"
             LOGGER.error(throwable);
             throwable.printStackTrace();
         }
@@ -177,7 +172,6 @@ public abstract class MasterTemplate extends AbstractActor {
 
             @Override
             public void apply(Object message) throws Exception {
-                println "------------------------------"
                 for (Procedure procedure : procedures) {
                     procedure.apply(message);
                 }

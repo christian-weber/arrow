@@ -57,17 +57,19 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 
 	<task:scheduler id="workflowScheduler" />
 
-	<bean class="org.arrow.service.impl.BusinessConditionBean"
-		id="conditionBean" />
-	<bean class="org.arrow.service.impl.BusinessConditionBean"
-		id="conditionBean21" />
+	<!--<bean class="org.arrow.service.impl.BusinessConditionBean"-->
+		<!--id="conditionBean" />-->
+	<!--<bean class="org.arrow.service.impl.BusinessConditionBean"-->
+		<!--id="conditionBean21" />-->
 
 	<bean class="org.arrow.service.engine.config.EngineConfiguration" />
 	<bean class="org.arrow.data.Neo4JDataConfiguration" />
     <bean class="org.arrow.runtime.RuntimeConfiguration" />
 
 	<!-- Test environment beans -->
-	<bean id="javaDelegateBean" class="org.arrow.service.impl.JavaDelegateBean" />
-	<bean id="expressionBean" class="org.arrow.service.impl.ExpressionBean" />
+	<!--<bean id="javaDelegateBean" class="org.arrow.service.impl.JavaDelegateBean" />-->
+	<!--<bean id="expressionBean" class="org.arrow.service.impl.ExpressionBean" />-->
+
+
 
 </beans>

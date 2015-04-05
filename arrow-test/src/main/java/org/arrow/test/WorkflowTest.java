@@ -16,10 +16,8 @@
 
 package org.arrow.test;
 
-import org.spockframework.runtime.extension.ExtensionAnnotation;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.arrow.test.spock.spring.CustomAnnotationDrivenExtension;
 
 import java.lang.annotation.*;
 
@@ -27,8 +25,7 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@ContextConfiguration(locations = "classpath:META-INF/spring/spring-workflow-testcontext.xml")
+@ContextConfiguration(classes = ArrowTestConfiguration.class)
 @TestExecutionListeners(mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS, listeners = SpringWorkflowTestExecutionListener.class)
-@ExtensionAnnotation(CustomAnnotationDrivenExtension.class)
 public @interface WorkflowTest {
 }

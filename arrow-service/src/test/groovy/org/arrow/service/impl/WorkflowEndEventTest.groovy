@@ -18,19 +18,20 @@ package org.arrow.service.impl
 
 import org.arrow.test.Given
 import org.arrow.test.WorkflowTest
+import org.arrow.test.spock.spring.WorkflowDslTrait
 import spock.lang.Specification
 import spock.lang.Timeout
 
 @WorkflowTest
 @Timeout(10)
-public class WorkflowEndEventTest extends Specification {
+public class WorkflowEndEventTest extends Specification implements WorkflowDslTrait {
 
     @Given("endevent/noneEndEvent.bpmn20.xml")
     def "test end event (none)"() {
         when:
             def pi = startById "noneEndEventTest"
         then:
-            wait(pi)
+            await(pi)
             assertSuccess pi
     }
 
@@ -39,7 +40,7 @@ public class WorkflowEndEventTest extends Specification {
         when:
             def pi = startById "noneEndEventTest"
         then:
-            wait(pi)
+            await(pi)
             assertSuccess pi
     }
 
@@ -48,7 +49,7 @@ public class WorkflowEndEventTest extends Specification {
         when:
             def pi = startById "noneEndEventTest"
         then:
-            wait(pi)
+            await(pi)
             assertSuccess pi
     }
 
@@ -57,7 +58,7 @@ public class WorkflowEndEventTest extends Specification {
         when:
             def pi = startById "noneEndEventTest"
         then:
-            wait(pi)
+            await(pi)
             assertSuccess pi
     }
 
@@ -66,7 +67,7 @@ public class WorkflowEndEventTest extends Specification {
         when:
             def pi = startById "noneEndEventTest"
         then:
-            wait(pi)
+            await(pi)
             assertSuccess pi
     }
 

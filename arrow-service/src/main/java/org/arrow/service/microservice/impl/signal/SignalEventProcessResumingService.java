@@ -92,8 +92,6 @@ public class SignalEventProcessResumingService implements EventMessageService<Si
                 return events;
             }
 
-//            Thread.sleep(1000);
-
             // signal reference based signal event
             Set<Execution> executions = executionRepository.findAllBySignalRef(signalRef);
             for (Execution exec : executions) {

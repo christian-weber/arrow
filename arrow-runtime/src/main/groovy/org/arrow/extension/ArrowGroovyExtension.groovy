@@ -48,4 +48,15 @@ class ArrowGroovyExtension {
         !CollectionUtils.contains(self.iterator(), reference)
     }
 
+    /**
+     * Indicates if the element which matches the closure exists within the collection.
+     *
+     * @param self
+     * @param closure
+     * @return boolean
+     */
+    static boolean matchAny(final Collection self, Closure closure) {
+        self.find(closure) != null
+    }
+
 }

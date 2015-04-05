@@ -328,7 +328,6 @@ public class MasterActor extends MasterTemplate {
      */
     @Override
     protected void onReceiveCompensateEvent(CompensateEventMessage escalationEvent) {
-        println" mmmmmmmmmmmmmmmmmmmmmmmmm"
         def pi = escalationEvent.processInstance
         def service = getExecutionService()
 

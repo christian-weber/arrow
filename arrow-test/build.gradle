@@ -15,14 +15,15 @@
  */
 
 dependencies {
-	compile project(":arrow-runtime")
-	compile project(":arrow-model")
-	compile project(":arrow-xml")
+    compile project(":arrow-runtime")
+    compile project(":arrow-model")
+    compile project(":arrow-xml")
 //	compile project(":arrow-data")
-	compile project(":arrow-data-neo4j")
+    compile project(":arrow-data-neo4j")
 
-	compile "junit:junit:4.10"
-	compile "org.springframework:spring-test:4.1.0.RELEASE"
-    compile "org.spockframework:spock-core:0.7-groovy-2.0"
-    compile "org.spockframework:spock-spring:0.7-groovy-2.0"
+    compile "junit:junit:4.10"
+    compile "org.springframework:spring-test:4.1.0.RELEASE"
+
+    providedCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    providedCompile "org.spockframework:spock-spring:1.0-groovy-2.4"
 }

@@ -21,5 +21,4 @@ include "arrow-runtime",
 	"arrow-test",
 	"arrow-xml",
 	"arrow-service",
-//	"arrow-data",
 	"arrow-data-neo4j"

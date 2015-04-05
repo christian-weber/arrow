@@ -16,6 +16,8 @@
 
 package org.arrow.test.spock.spring
 
+import akka.actor.ActorSystem
+import akka.dispatch.OnSuccess
 import org.springframework.context.ApplicationContext
 import org.springframework.util.Assert
 import org.arrow.data.neo4j.repository.Neo4jExecutionGroupRepository
@@ -24,12 +26,12 @@ import org.arrow.data.neo4j.repository.Neo4jProcessInstanceRepository
 import org.arrow.runtime.RuntimeService
 import org.arrow.runtime.api.event.BusinessCondition
 import org.arrow.runtime.api.event.BusinessCondition.BusinessConditionContext
-import org.arrow.runtime.message.EventMessage
 import org.arrow.runtime.execution.Execution
 import org.arrow.runtime.execution.ProcessInstance
 import org.arrow.runtime.execution.State
-import org.arrow.runtime.message.impl.DefaultFinishEventMessage
 import org.arrow.runtime.execution.service.ExecutionService
+import org.arrow.runtime.message.EventMessage
+import org.arrow.runtime.message.impl.DefaultFinishEventMessage
 import org.arrow.test.SpringWorkflowTestExecutionListener
 import scala.concurrent.Await
 import scala.concurrent.Future
@@ -45,7 +47,7 @@ import scala.concurrent.duration.Duration
  * @author christian.weber
  */
 @SuppressWarnings("GroovyAssignabilityCheck")
-public class WorkflowDsl {
+public trait WorkflowDslTrait {
 
     /**
      * Starts a process instance by the given id.
@@ -76,14 +78,8 @@ public class WorkflowDsl {
      * @param signal the signal reference
      * @return ProcessInstance
      */
-    public static Iterable<ProcessInstance> startBySignal(String signal) throws Exception {
-        def future = runtimeService().startProcessBySignal(signal);
-        Iterable<ProcessInstance> instances = Await.result(future, Duration.Inf());
-
-        Assert.notNull(instances);
-        Assert.isTrue(instances.iterator().hasNext());
-
-        return instances;
+    public static Future<Iterable<ProcessInstance>> startBySignal(String signal) throws Exception {
+        return runtimeService().startProcessBySignal(signal);
     }
 
     /**
@@ -110,6 +106,10 @@ public class WorkflowDsl {
         condition.evaluate(new BusinessConditionContext());
 
         Thread.sleep 500
+    }
+
+    public static void await(long timeout) {
+        Thread.sleep timeout
     }
 
     /**
@@ -167,7 +167,7 @@ public class WorkflowDsl {
      *
      * @return ProcessInstance
      */
-    public ProcessInstance wait(ProcessInstance pi) {
+    public static ProcessInstance await(ProcessInstance pi) {
         pi.waitOnCompletion();
         return pi;
     }
@@ -178,9 +178,32 @@ public class WorkflowDsl {
      *
      * @return Iterable < ProcessInstance >
      */
-    public Iterable<ProcessInstance> wait(Iterable<ProcessInstance> pis) {
-        pis.each { wait it }
+    public static Iterable<ProcessInstance> await(Iterable<ProcessInstance> pis) {
+        for (ProcessInstance pi : pis) {
+            await pi
+        }
         return pis;
+    }
+
+    /**
+     * Blocks the current thread until the given process instances are complete.
+     * @param pis the process instances
+     *
+     * @return Iterable < ProcessInstance >
+     */
+    public static Iterable<ProcessInstance> await(Future<Iterable<ProcessInstance>> pis) {
+        ActorSystem system = getApplicationContext().getBean(ActorSystem.class)
+        pis.onSuccess(new AwaitProcessInstanceFuture(), system.dispatcher())
+        return Await.result(pis, Duration.Inf())
+    }
+
+    static class AwaitProcessInstanceFuture extends OnSuccess<Iterable<ProcessInstance>> {
+        @Override
+        void onSuccess(Iterable<ProcessInstance> processInstances) throws Throwable {
+            for (ProcessInstance pi : processInstances) {
+                await pi
+            }
+        }
     }
 
     /**
@@ -344,6 +367,14 @@ public class WorkflowDsl {
     private static Collection assertNotEmpty(Collection collection) {
         Assert.isTrue(collection.size() > 0, "the collection must not be empty")
         return collection
+    }
+
+    public static void executeAdHoc(pi, adHocId, taskId) {
+        executionService().adhoc().execute(pi, adHocId, taskId)
+    }
+
+    public static void finishAdHoc(pi, adHocId) {
+        executionService().adhoc().finish(pi, adHocId)
     }
 
 }
