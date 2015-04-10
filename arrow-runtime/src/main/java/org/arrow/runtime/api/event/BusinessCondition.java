@@ -50,7 +50,7 @@ public interface BusinessCondition {
      * @author christian.weber
      * @since 1.0.0
      */
-    public static class BusinessConditionContext {
+    class BusinessConditionContext {
 
         private final Map<String, Object> variables = new HashMap<>();
 

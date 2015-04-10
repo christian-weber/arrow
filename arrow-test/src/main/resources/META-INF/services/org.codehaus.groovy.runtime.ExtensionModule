@@ -1,0 +1,3 @@
+moduleName = arrow-test
+moduleVersion = 1.0
+extensionClasses = org.arrow.extension.WorkflowDslExtension

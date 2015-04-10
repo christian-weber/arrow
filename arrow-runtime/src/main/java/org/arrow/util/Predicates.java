@@ -35,39 +35,4 @@ public final class Predicates {
         };
     }
 
-    public static <T>Predicate<T> when(Predicate<T>predicate) {
-        return predicate;
-    }
-
-    public static <T>Predicate<T> when(Class<T> cls) {
-        return new ClassBindedPredicate<>(cls);
-    }
-
-    public static <T>Predicate<T> when(Class<T> cls, Predicate<T> predicate) {
-        return new ClassBindedPredicate<>(cls).and(predicate);
-    }
-
-    public static class ClassBindedPredicate<T> implements Predicate<T> {
-
-        private final Class<T> cls;
-
-        public ClassBindedPredicate(Class<T> cls) {
-            this.cls = cls;
-        }
-
-        @Override
-        public boolean test(T t) {
-            return t.getClass().isAssignableFrom(cls);
-        }
-
-        public Class<T> getBindedClass() {
-            return cls;
-        }
-
-        @Override
-        public String toString() {
-            return "ClassBindedPredicate{" + "cls=" + cls + '}';
-        }
-    }
-
 }
