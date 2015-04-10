@@ -18,6 +18,9 @@ package org.arrow.test.javadelegate;
 
 import org.arrow.runtime.api.task.JavaDelegate;
 import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.message.EventMessage;
+import org.arrow.util.FutureUtil;
+import scala.concurrent.Future;
 
 /**
  * {@link JavaDelegate} implementation used to pass through.
@@ -28,8 +31,8 @@ import org.arrow.runtime.execution.Execution;
 public class PassThroughJavaDelegate implements JavaDelegate {
 	
 	@Override
-	public void execute(Execution execution) {
-		// do nothing
+	public Future<Iterable<EventMessage>> execute(Execution execution) {
+		return FutureUtil.result();
 	}
 	
 }

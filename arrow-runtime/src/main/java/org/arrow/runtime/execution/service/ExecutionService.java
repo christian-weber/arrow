@@ -135,10 +135,10 @@ public interface ExecutionService {
 
 	/**
 	 * Evaluates the given spring EL expression.
-	 * 
+	 *
 	 * @param expression the SpEL expression
 	 */
-	void evaluateExpression(String expression);
+	Object evaluateExpression(String expression);
 
 	/**
 	 * Returns an {@link ExecutionQuery} instance.

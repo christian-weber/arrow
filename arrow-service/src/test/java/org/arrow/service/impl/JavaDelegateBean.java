@@ -20,12 +20,16 @@ import org.arrow.runtime.api.event.BusinessCondition;
 import org.arrow.runtime.api.event.EventTrigger;
 import org.arrow.runtime.api.task.JavaDelegate;
 import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.message.EventMessage;
+import org.arrow.util.FutureUtil;
 import org.springframework.beans.factory.BeanNameAware;
+import scala.concurrent.Future;
 
 public class JavaDelegateBean implements JavaDelegate {
 
     @Override
-    public void execute(Execution execution) {
+    public Future<Iterable<EventMessage>> execute(Execution execution) {
         System.out.println("execute java delegate");
+        return FutureUtil.result();
     }
 }

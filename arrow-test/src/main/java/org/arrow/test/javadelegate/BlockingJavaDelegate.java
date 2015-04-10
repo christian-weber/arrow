@@ -18,6 +18,9 @@ package org.arrow.test.javadelegate;
 
 import org.arrow.runtime.api.task.JavaDelegate;
 import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.message.EventMessage;
+import org.arrow.util.FutureUtil;
+import scala.concurrent.Future;
 
 /**
  * {@link JavaDelegate} implementation used to simulate a 3 second blocking behavior.
@@ -28,12 +31,13 @@ import org.arrow.runtime.execution.Execution;
 public class BlockingJavaDelegate implements JavaDelegate {
 	
 	@Override
-	public void execute(Execution execution) {
+	public Future<Iterable<EventMessage>> execute(Execution execution) {
 		synchronized(this) {
 			try {
 				this.wait();
+				return FutureUtil.result();
 			} catch (InterruptedException e) {
-				// do nothing
+				throw new RuntimeException(e);
 			}
 		}
 	}

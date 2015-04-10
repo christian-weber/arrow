@@ -24,6 +24,7 @@ import org.arrow.runtime.message.EventMessage;
 import org.arrow.util.FutureUtil;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.util.StringUtils;
 import scala.concurrent.Future;
 
 /**
@@ -45,32 +46,49 @@ public class ServiceTask extends AbstractTask {
 	 */
 	@Override
 	public Future<Iterable<EventMessage>> executeTask(Execution execution, ExecutionService service) {
-		
-		// spring bean name delegate
-		if (!isEmpty(beanName)) {
-			JavaDelegate javaDelegate = service.getJavaDelegateByName(beanName);
-			javaDelegate.execute(execution);
+
+		try {
+			// spring bean name delegate
+			if (!StringUtils.isEmpty(beanName)) {
+				JavaDelegate javaDelegate = service.getJavaDelegateByName(beanName);
+				return javaDelegate.execute(execution);
+			}
+
+			// spring expression delegate
+			if (!StringUtils.isEmpty(expression)) {
+				Object result = service.evaluateExpression(expression);
+				return tryCast(result);
+			}
+
+			// class delegate
+			if (!StringUtils.isEmpty(serviceClass)) {
+				JavaDelegate javaDelegate = service.getJavaDelegateByClassName(serviceClass);
+				return javaDelegate.execute(execution);
+			}
+
+			return FutureUtil.result();
+		} finally {
+			// mark the task as finished
+			finish(execution, service);
 		}
-
-		// spring expression delegate
-		else if (!isEmpty(expression)) {
-			service.evaluateExpression(expression);
-		}
-
-		// class delegate
-		else if (!isEmpty(serviceClass)) {
-			JavaDelegate javaDelegate = service.getJavaDelegateByClassName(serviceClass);
-			javaDelegate.execute(execution);
-		}
-
-		// mark the task as finished
-		finish(execution, service);
-
-        return FutureUtil.result();
     }
 
-	private boolean isEmpty(String str) {
-		return str == null || str.length() == 0;
+	/**
+	 * Tries to cast the given object to a future result of iterable event messages.
+	 * If the object cannot be cast a fallback future is returned.
+	 *
+	 * @param result the object to cast
+	 * @return Future
+	 */
+	@SuppressWarnings("unchecked")
+	private Future<Iterable<EventMessage>> tryCast(Object result) {
+		if (!(result instanceof Future)) return FutureUtil.result();
+
+		try {
+			return (Future<Iterable<EventMessage>>) result;
+		} catch (ClassCastException ignored) {
+			return FutureUtil.result();
+		}
 	}
 
     @SuppressWarnings("unused")

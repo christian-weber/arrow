@@ -19,6 +19,8 @@ package org.arrow.util
 import org.arrow.runtime.api.gateway.AbstractTransitionEvaluation
 import org.arrow.runtime.api.task.JavaDelegate
 import org.arrow.runtime.execution.Execution
+import org.arrow.runtime.message.EventMessage
+import scala.concurrent.Future
 import spock.lang.Specification
 
 public class DelegateUtilTest extends Specification {
@@ -70,8 +72,8 @@ public class DelegateUtilTest extends Specification {
     public static class JavaDelegateBean implements JavaDelegate {
 
         @Override
-        public void execute(Execution execution) {
-            // do nothing
+        public Future<Iterable<EventMessage>> execute(Execution execution) {
+            return FutureUtil.result();
         }
 
     }

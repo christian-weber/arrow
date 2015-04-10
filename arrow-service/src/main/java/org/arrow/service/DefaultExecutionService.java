@@ -121,14 +121,14 @@ public class DefaultExecutionService implements ExecutionService {
      * {@inheritDoc}
      */
     @Override
-    public void evaluateExpression(String expression) {
+    public Object evaluateExpression(String expression) {
         ExpressionParser parser = new SpelExpressionParser();
 
         StandardEvaluationContext ec = new StandardEvaluationContext();
         ec.setBeanResolver(new BeanFactoryResolver(context));
         Expression expr = parser.parseExpression(expression);
 
-        expr.getValue(ec);
+        return expr.getValue(ec);
     }
 
     /**

@@ -17,6 +17,8 @@
 package org.arrow.runtime.api.task;
 
 import org.arrow.runtime.execution.Execution;
+import org.arrow.runtime.message.EventMessage;
+import scala.concurrent.Future;
 
 /**
  * Classes which implements this interface can be executed by the process engine
@@ -32,6 +34,6 @@ public interface JavaDelegate {
      *
      * @param execution the execution instance
      */
-    void execute(Execution execution);
+    Future<Iterable<EventMessage>> execute(Execution execution);
 
 }
